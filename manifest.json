@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+
+  "name": "Savior Plugin",
+  "description": "This extension will save your webpage",
+  "version": "1.0",
+
+  "browser_action": {
+   "default_icon": "icon.png",
+   "default_popup": "popup.html"
+  },
+
+  "background" : {
+    "scripts": ["eventPage.js"],
+    "persistent": false
+  },
+  "permissions": [
+   "chrome://favicon/",
+   "activeTab",
+   "declarativeContent",
+   "storage",
+   "<all_urls>",
+   "contextMenus",
+   "tabs"
+   ],
+   "content_security_policy": "script-src 'self'; object-src 'self'; img-src chrome://favicon;"
+}
