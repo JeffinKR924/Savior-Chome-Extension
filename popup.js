@@ -8,16 +8,10 @@ function btnNamer(btnName) {
   btnName = new URL(btnName);
   btnName = btnName.hostname;
   btnName = btnName.toString();
-  btnName = btnName.replaceAll("www.", "");
-  btnName = btnName.replaceAll("www4.", "");
-  btnName = btnName.replaceAll("www3.", "");
-  btnName = btnName.replaceAll(".com", "");
-  btnName = btnName.replaceAll(".net", "");
-  btnName = btnName.replaceAll(".org", "");
-  btnName = btnName.replaceAll(".co", "");
-  btnName = btnName.replaceAll(".us", "");
-  btnName = btnName.replaceAll(".gov", "");
-  btnName = btnName.replaceAll(".edu", "");
+  subDomain = ["www.", "www4.", "www3.", ".com", ".net", ".org", ".co", ".us", ".gov", ".edu"];
+  for (var i =0; i < subDomain.length; i++){
+    btnName = btnName.replaceAll(subDomain[i], "");
+  }
   btnName = btnName.charAt(0).toUpperCase()+btnName.slice(1);
   checkSt = btnName.includes(".");
   if (checkSt==true) {
@@ -46,7 +40,11 @@ for (var i = 0; i < savedItems; i++){
     var favIconImage = document.createElement('img');
     favIconImage.src = favIconURL;
     favIconImage.className = 'favIcon';
+    var faIconFile = document.createElement("h5");
+    faIconFile.innerHTML = '<i class="fa-solid fa-file"></i>';
+    faIconFile.className = 'faIcon';
     pageBtn.appendChild(favIconImage);
+    pageBtn.appendChild(faIconFile);
     pageBtn.name = nameUrl;
     pageBtn.onclick = function() {
       newUrl = window.localStorage.getItem(this.name);
@@ -74,11 +72,11 @@ for (var i = 0; i < savedItems; i++){
     var favIconImage = document.createElement('img');
     favIconImage.src = favIconURL;
     favIconImage.className = 'favIcon';
-    var faIcon = document.createElement("h5");
-    faIcon.innerHTML = '<i class="fa fa-folder"></i>';
-    faIcon.className = 'faIcon';
+    var faIconFolder = document.createElement("h5");
+    faIconFolder.innerHTML = '<i class="fa fa-folder"></i>';
+    faIconFolder.className = 'faIcon';
     sessionBtn.appendChild(favIconImage);
-    sessionBtn.appendChild(faIcon);
+    sessionBtn.appendChild(faIconFolder);
     var btnTypeIcon
     // newIcon.class = '\f07b';
     // sessionBtn.appendChild(newIcon);
@@ -109,6 +107,9 @@ save.onclick = function (element) {
     var favIconImage = document.createElement('img');
     favIconImage.src = favIconURL;
     favIconImage.className = 'favIcon';
+    var faIconFile = document.createElement("h5");
+    faIconFile.innerHTML = '<i class="fa-solid fa-file"></i>';
+    faIconFile.className = 'faIcon';
     currentUrl = url;
     currentName = btnNamer(currentUrl);
     window.localStorage.setItem(String(url), url);
@@ -116,6 +117,7 @@ save.onclick = function (element) {
     btn.className = 'dynamicButton';
     btn.innerHTML = (currentName);
     btn.appendChild(favIconImage);
+    btn.appendChild(faIconFile);
     btn.onclick = function() {
       chrome.tabs.create({
         url: url
@@ -141,11 +143,11 @@ saveSession.onclick = function (element) {
     var favIconImage = document.createElement('img');
     favIconImage.src = favIconURL;
     favIconImage.className = 'favIcon';
-    var faIcon = document.createElement("h5");
-    faIcon.innerHTML = '<i class="fa fa-folder"></i>';
-    faIcon.className = 'faIcon';
+    var faIconFolder = document.createElement("h5");
+    faIconFolder.innerHTML = '<i class="fa fa-folder"></i>';
+    faIconFolder.className = 'faIcon';
     btn.appendChild(favIconImage);
-    btn.appendChild(faIcon);
+    btn.appendChild(faIconFolder);
     myDiv.appendChild(btn);
     btn.onclick = function() {
       for (var a = 0; a < urlArray.length; a++) {
