@@ -42,7 +42,7 @@ for (var i = 0; i < savedItems; i++){
     favIconImage.className = 'favIcon';
     var faIconFile = document.createElement("h5");
     faIconFile.innerHTML = '<i class="fa-solid fa-file"></i>';
-    faIconFile.className = 'faIcon';
+    faIconFile.className = 'faIconFiles';
     pageBtn.appendChild(favIconImage);
     pageBtn.appendChild(faIconFile);
     pageBtn.name = nameUrl;
@@ -74,7 +74,7 @@ for (var i = 0; i < savedItems; i++){
     favIconImage.className = 'favIcon';
     var faIconFolder = document.createElement("h5");
     faIconFolder.innerHTML = '<i class="fa fa-folder"></i>';
-    faIconFolder.className = 'faIcon';
+    faIconFolder.className = 'faIconFolders';
     sessionBtn.appendChild(favIconImage);
     sessionBtn.appendChild(faIconFolder);
     var btnTypeIcon
@@ -109,7 +109,7 @@ save.onclick = function (element) {
     favIconImage.className = 'favIcon';
     var faIconFile = document.createElement("h5");
     faIconFile.innerHTML = '<i class="fa-solid fa-file"></i>';
-    faIconFile.className = 'faIcon';
+    faIconFile.className = 'faIconFiles';
     currentUrl = url;
     currentName = btnNamer(currentUrl);
     window.localStorage.setItem(String(url), url);
@@ -145,7 +145,7 @@ saveSession.onclick = function (element) {
     favIconImage.className = 'favIcon';
     var faIconFolder = document.createElement("h5");
     faIconFolder.innerHTML = '<i class="fa fa-folder"></i>';
-    faIconFolder.className = 'faIcon';
+    faIconFolder.className = 'faIconFolders';
     btn.appendChild(favIconImage);
     btn.appendChild(faIconFolder);
     myDiv.appendChild(btn);

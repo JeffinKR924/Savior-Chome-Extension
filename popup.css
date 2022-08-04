@@ -104,7 +104,10 @@
     background-color: #b30000;
     color: white;
   }
-  .dynamicButton:hover .faIcon {
+  .dynamicButton:hover .faIconFiles {
+    color: white;
+  }
+  .dynamicButton:hover .faIconFolders {
     color: white;
   }
   #titleDiv {
@@ -146,11 +149,19 @@
     top: 8.7px;
     right: 45px;
   }
-  .faIcon {
+  .faIconFiles {
     position: absolute;
-    top: -25px;
-    right: 10px;
-    /* 10 */
+    top: -25.1px;
+    right: 11.5px;
+    font-size: 21px;
+    color: #f42f42;
+    /* #cc0c0c */
+    /* #C32534 */
+  }
+  .faIconFolders {
+    position: absolute;
+    top: -25.1px;
+    right: 9px;
     font-size: 21px;
     color: #f42f42;
     /* #cc0c0c */
