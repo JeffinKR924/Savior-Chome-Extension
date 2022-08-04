@@ -92,19 +92,19 @@
     overflow:hidden;
     box-shadow: 0px 3px 8px rgba(0,0,0,0.2), inset 0px 2px 3px #f74f5f;
   }
-  .dynamicButton:after{
+  .dynamicButton:before{
+    content:"";
     background: rgba(0,0,0,0.2);
     padding:20px;
     position:absolute;
     right:0;
     top:0;
-    /* font-family: fontAwesome;
-    font-size: 16px; */
-    /* color: white; */
-    content: "";
   }
   .dynamicButton:hover {
     background-color: #b30000;
+    color: white;
+  }
+  .dynamicButton:hover .faIcon {
     color: white;
   }
   #titleDiv {
@@ -150,12 +150,11 @@
     position: absolute;
     top: -25px;
     right: 10px;
+    /* 10 */
     font-size: 21px;
-    color: #cc0c0c;
+    color: #f42f42;
+    /* #cc0c0c */
     /* #C32534 */
-  }
-  .faIcon:hover {
-    color: white;
   }
 </style>
 </head>
