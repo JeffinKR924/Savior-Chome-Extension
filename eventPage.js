@@ -14,6 +14,11 @@ chrome.contextMenus.removeAll(function() {
     "title": "Delete Session",
     "contexts": ["all"]
   })
+  chrome.contextMenus.create({
+    "id": "rename",
+    "title": "Rename",
+    "contexts": ["all"]
+  })
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
@@ -24,7 +29,6 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       window.localStorage.setItem(String(url), url);
     } 
     else if (info.menuItemId === "deletePage"){
-      // window.localStorage.removeItem(url)
       var pageFlagList = (sessionStorage.getItem('pageFlag'));
       var pageLink = pageFlagList.slice(pageFlagList.indexOf(',') + 1);
       var pageFlag = pageFlagList.slice(0, pageFlagList.indexOf(','));
@@ -43,6 +47,18 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       }
     } 
     else {
+      var pageFlagList = (sessionStorage.getItem('pageFlag'));
+      var pageLink = pageFlagList.slice(pageFlagList.indexOf(',') + 1);
+      var pageFlag = pageFlagList.slice(0, pageFlagList.indexOf(','));
+
+      var sessionFlagList = (sessionStorage.getItem('sessionFlag'));
+      var sessionLink = sessionFlagList.slice(sessionFlagList.indexOf(',') + 1);
+      var sessionFlag = sessionFlagList.slice(0, sessionFlagList.indexOf(','));
+
+      if (sessionFlag == 'up' || pageFlag == 'up'){
+        
+      }
+      console.log("Hello");
     }
   });
 })

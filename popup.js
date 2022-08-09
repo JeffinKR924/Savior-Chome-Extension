@@ -78,8 +78,6 @@ for (var i = 0; i < savedItems; i++){
     sessionBtn.appendChild(favIconImage);
     sessionBtn.appendChild(faIconFolder);
     var btnTypeIcon
-    // newIcon.class = '\f07b';
-    // sessionBtn.appendChild(newIcon);
     sessionBtn.name = nameUrl;
     sessionBtn.id = String(nameNum);
     sessionBtn.onclick = function() {
@@ -99,6 +97,10 @@ for (var i = 0; i < savedItems; i++){
     myDiv.appendChild(sessionBtn);
   }
 }
+
+// The hover portion of this code saves this buttons name into session storage
+// If I have the button name, then maybe i can use that to identify which button
+// it is, and then change the innerhtml of that button?
 
 save.onclick = function (element) {
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
@@ -166,15 +168,3 @@ clearAll.onclick = function (element) {
     window.open('', '_blank').close();
   }
 }
-
-
-// function getHoveredImage() {
-//   var hoveredElements = $(':hover'),
-//       // the last element is the event source
-//       hoveredElement  = hoveredElements.last();
-
-//   if (hoveredElement.prop("tagName") === 'button') {
-//     return hoveredElement;
-//   }
-// }
-// test
