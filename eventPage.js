@@ -56,9 +56,9 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       var sessionFlag = sessionFlagList.slice(0, sessionFlagList.indexOf(','));
 
       if (sessionFlag == 'up' || pageFlag == 'up'){
-        
+        console.log('hello');
+        val = prompt('Whats up?');
       }
-      console.log("Hello");
     }
   });
 })

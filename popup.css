@@ -91,6 +91,7 @@
     border:0;
     overflow:hidden;
     box-shadow: 0px 3px 8px rgba(0,0,0,0.2), inset 0px 2px 3px #f74f5f;
+    contenteditable: 
   }
   .dynamicButton:before{
     content:"";

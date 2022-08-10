@@ -36,6 +36,7 @@ for (var i = 0; i < savedItems; i++){
     pastUrl = nameUrl;
     pastName = btnNamer(pastUrl);
     pageBtn.innerHTML = (pastName);
+    // pageBtn.contentEditable = true;
     favIconURL = "chrome://favicon/size/23@1x/" + nameUrl;
     var favIconImage = document.createElement('img');
     favIconImage.src = favIconURL;
@@ -55,7 +56,7 @@ for (var i = 0; i < savedItems; i++){
     pageBtn.addEventListener("mouseover", function( event ) {
       sessionStorage.setItem('pageFlag', ['up', this.name]);
       var pageFlagList = (sessionStorage.getItem('pageFlag').split(','));
-      console.log(pageFlagList);
+      // console.log(pageFlagList);
     });
     pageBtn.addEventListener("mouseout",function() {
       sessionStorage.setItem('pageFlag', ['down', null]);
