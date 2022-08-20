@@ -45,20 +45,28 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         window.localStorage.removeItem(sessionLink);
         window.open('', '_blank').close();
       }
-    } 
-    else {
-      var pageFlagList = (sessionStorage.getItem('pageFlag'));
-      var pageLink = pageFlagList.slice(pageFlagList.indexOf(',') + 1);
-      var pageFlag = pageFlagList.slice(0, pageFlagList.indexOf(','));
-
-      var sessionFlagList = (sessionStorage.getItem('sessionFlag'));
-      var sessionLink = sessionFlagList.slice(sessionFlagList.indexOf(',') + 1);
-      var sessionFlag = sessionFlagList.slice(0, sessionFlagList.indexOf(','));
-
-      if (sessionFlag == 'up' || pageFlag == 'up'){
-        console.log('hello');
-        val = prompt('Whats up?');
-      }
+    }
+    else if (info.menuItemId === "deleteSession") {
+      
     }
   });
 })
+
+    // else {
+    //   try {
+    //     var pageFlagList = (sessionStorage.getItem('pageFlag'));
+    //     var pageLink = pageFlagList.slice(pageFlagList.indexOf(',') + 1);
+    //     var pageFlag = pageFlagList.slice(0, pageFlagList.indexOf(','));
+    //   }
+
+    //   catch (e) {
+    //     var sessionFlagList = (sessionStorage.getItem('sessionFlag'));
+    //     var sessionLink = sessionFlagList.slice(sessionFlagList.indexOf(',') + 1);
+    //     var sessionFlag = sessionFlagList.slice(0, sessionFlagList.indexOf(','));
+    //   }
+
+    //   if (sessionFlag == 'up' || pageFlag == 'up'){
+    //     console.log('hello');
+    //     val = prompt('Whats up?');
+    //   }
+    // }

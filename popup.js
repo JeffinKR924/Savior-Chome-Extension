@@ -35,8 +35,9 @@ for (var i = 0; i < savedItems; i++){
     pageBtn.className = 'dynamicButton';
     pastUrl = nameUrl;
     pastName = btnNamer(pastUrl);
-    pageBtn.innerHTML = (pastName);
     // pageBtn.contentEditable = true;
+    pageBtnName = (JSON.parse(window.localStorage.getItem(nameUrl)))[1];
+    pageBtn.innerHTML = (pageBtnName);
     favIconURL = "chrome://favicon/size/23@1x/" + nameUrl;
     var favIconImage = document.createElement('img');
     favIconImage.src = favIconURL;
@@ -67,7 +68,8 @@ for (var i = 0; i < savedItems; i++){
     sessionBtn = document.createElement("button");
     sessionBtn.className = 'dynamicButton';
     nameNum+=1;
-    sessionBtn.innerHTML = 'Session ' + String(nameNum);
+    sessionBtnName = (JSON.parse(window.localStorage.getItem(nameUrl)))[1];
+    sessionBtn.innerHTML = sessionBtnName;
     sessionFavIcon = (JSON.parse(window.localStorage.getItem(nameUrl)))[0];
     favIconURL = "chrome://favicon/size/23@1x/" + (sessionFavIcon);
     var favIconImage = document.createElement('img');
@@ -105,7 +107,11 @@ for (var i = 0; i < savedItems; i++){
 
 save.onclick = function (element) {
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+    valueArray = [];
+    urlArray = [];
     url = tabs[0].url;
+    urlArray.push(url);
+    valueArray.push(urlArray);
     favIconURL = "chrome://favicon/size/23@1x/" + url;
     var favIconImage = document.createElement('img');
     favIconImage.src = favIconURL;
@@ -115,7 +121,8 @@ save.onclick = function (element) {
     faIconFile.className = 'faIconFiles';
     currentUrl = url;
     currentName = btnNamer(currentUrl);
-    window.localStorage.setItem(String(url), url);
+    valueArray.push(currentName);
+    window.localStorage.setItem(String(url), JSON.stringify(valueArray));
     btn = document.createElement("BUTTON");
     btn.className = 'dynamicButton';
     btn.innerHTML = (currentName);
@@ -132,13 +139,17 @@ save.onclick = function (element) {
 
 saveSession.onclick = function (element) {
   chrome.tabs.query({lastFocusedWindow: true}, function(tabs) {
+    valueArray = [];
     urlArray = [];
     for (i = 0; i<tabs.length; i++){
       url = tabs[i].url;
       urlArray.push(url);
     }
+    valueArray.push(urlArray);
+    localStorageLength = (localStorage.length)+1;
+    valueArray.push("Session " + String(localStorageLength));
     var arrayName = ("SESSION924"+urlArray.toString());
-    window.localStorage.setItem(String(arrayName), JSON.stringify(urlArray));
+    window.localStorage.setItem(String(arrayName), JSON.stringify(valueArray));
     btn = document.createElement("BUTTON");
     btn.className = 'dynamicButton';
     btn.innerHTML = ("New Session");
@@ -169,3 +180,4 @@ clearAll.onclick = function (element) {
     window.open('', '_blank').close();
   }
 }
+
