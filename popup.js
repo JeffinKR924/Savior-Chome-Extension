@@ -25,6 +25,7 @@ function btnNamer(btnName) {
   return btnName;
 }
 
+
 savedItems = parseInt(window.localStorage.length);
 var nameNum = 0;
 for (var i = 0; i < savedItems; i++){
@@ -55,9 +56,14 @@ for (var i = 0; i < savedItems; i++){
       });
     }
     pageBtn.addEventListener("mouseover", function( event ) {
-      sessionStorage.setItem('pageFlag', ['up', this.name]);
-      var pageFlagList = (sessionStorage.getItem('pageFlag').split(','));
-      // console.log(pageFlagList);
+      chrome.contextMenus.onClicked.addListener((info, tab) => {
+        chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+          if (info.menuItemId === "deletePage") {
+            window.localStorage.removeItem(this.name);
+            window.open('', '_blank').close();
+          }
+        });
+      })
     });
     pageBtn.addEventListener("mouseout",function() {
       sessionStorage.setItem('pageFlag', ['down', null]);
@@ -92,10 +98,17 @@ for (var i = 0; i < savedItems; i++){
       }
     }
     sessionBtn.addEventListener("mouseover", function( event ) {
-      sessionStorage.setItem('sessionFlag', ['up', this.name]);
-    });
-    sessionBtn.addEventListener("mouseout",function() {
-      sessionStorage.setItem('sessionFlag', ['down', null]);
+      chrome.contextMenus.onClicked.addListener((info, tab) => {
+        chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+          if (info.menuItemId === "deleteSession") {
+            window.localStorage.removeItem(this.name);
+            window.open('', '_blank').close();
+          }
+          else if (info.menuItemId === "rename") {
+            chrome.windows.create({url: "prompt.html", type: "popup"});
+          }
+        });
+      })
     });
     myDiv.appendChild(sessionBtn);
   }
@@ -180,4 +193,3 @@ clearAll.onclick = function (element) {
     window.open('', '_blank').close();
   }
 }
-
