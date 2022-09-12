@@ -25,7 +25,7 @@ function btnNamer(btnName) {
   return btnName;
 }
 
-
+testFlag = 0;
 savedItems = parseInt(window.localStorage.length);
 var nameNum = 0;
 for (var i = 0; i < savedItems; i++){
@@ -97,6 +97,7 @@ for (var i = 0; i < savedItems; i++){
         });
       }
     }
+    testFlag = 1;
     sessionBtn.addEventListener("mouseover", function( event ) {
       chrome.contextMenus.onClicked.addListener((info, tab) => {
         chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
@@ -104,11 +105,16 @@ for (var i = 0; i < savedItems; i++){
             window.localStorage.removeItem(this.name);
             window.open('', '_blank').close();
           }
-          else if (info.menuItemId === "rename") {
-            chrome.windows.create({url: "prompt.html", type: "popup"});
+          else if (info.menuItemId === "rename" && testFlag == 1) {
+            let newSessionName = prompt("Enter a new name:", String((JSON.parse(window.localStorage.getItem(this.name)))[1]));
+            console.log(newSessionName);
+            window.open('', '_blank').close();
           }
         });
       })
+    });
+    sessionBtn.addEventListener("mouseout",function() {
+      testFlag = 0;
     });
     myDiv.appendChild(sessionBtn);
   }
