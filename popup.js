@@ -50,7 +50,7 @@ for (var i = 0; i < savedItems; i++){
     pageBtn.appendChild(faIconFile);
     pageBtn.name = nameUrl;
     pageBtn.onclick = function() {
-      newUrl = window.localStorage.getItem(this.name);
+      newUrl = String((JSON.parse(window.localStorage.getItem(this.name)))[0]);
       chrome.tabs.create({
         url: newUrl
       });
@@ -90,7 +90,7 @@ for (var i = 0; i < savedItems; i++){
     sessionBtn.name = nameUrl;
     sessionBtn.id = String(nameNum);
     sessionBtn.onclick = function() {
-      session = JSON.parse(window.localStorage.getItem(this.name));
+      session = (JSON.parse(window.localStorage.getItem(this.name)))[0];
       for (var z = 0; z < session.length; z++) {
         chrome.tabs.create({
           url: session[z]
