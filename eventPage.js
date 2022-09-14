@@ -28,42 +28,6 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       currentUrl = url;
       window.localStorage.setItem(String(url), url);
     } 
-    // else if (info.menuItemId === "deletePage"){
-    //   var pageFlagList = (sessionStorage.getItem('pageFlag'));
-    //   var pageLink = pageFlagList.slice(pageFlagList.indexOf(',') + 1);
-    //   var pageFlag = pageFlagList.slice(0, pageFlagList.indexOf(','));
-    //   if (pageFlag == 'up'){
-    //     window.localStorage.removeItem(pageLink);
-    //     window.open('', '_blank').close();
-    //   }
-    // }
-    // else if (info.menuItemId === "deleteSession") {
-    //   var sessionFlagList = (sessionStorage.getItem('sessionFlag'));
-    //   var sessionLink = sessionFlagList.slice(sessionFlagList.indexOf(',') + 1);
-    //   var sessionFlag = sessionFlagList.slice(0, sessionFlagList.indexOf(','));
-    //   if (sessionFlag == 'up'){
-    //     window.localStorage.removeItem(sessionLink);
-    //     window.open('', '_blank').close();
-    //   }
-    // }
   });
 })
 
-    // else {
-    //   try {
-    //     var pageFlagList = (sessionStorage.getItem('pageFlag'));
-    //     var pageLink = pageFlagList.slice(pageFlagList.indexOf(',') + 1);
-    //     var pageFlag = pageFlagList.slice(0, pageFlagList.indexOf(','));
-    //   }
-
-    //   catch (e) {
-    //     var sessionFlagList = (sessionStorage.getItem('sessionFlag'));
-    //     var sessionLink = sessionFlagList.slice(sessionFlagList.indexOf(',') + 1);
-    //     var sessionFlag = sessionFlagList.slice(0, sessionFlagList.indexOf(','));
-    //   }
-
-    //   if (sessionFlag == 'up' || pageFlag == 'up'){
-    //     console.log('hello');
-    //     val = prompt('Whats up?');
-    //   }
-    // }

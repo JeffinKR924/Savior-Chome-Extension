@@ -2,7 +2,6 @@ let save = document.getElementById("save");
 let saveSession = document.getElementById("saveSession");
 let clearAll = document.getElementById("clearAll");
 var myDiv = document.getElementById("dynamicBtnDiv");
-// from eventPage import chrome.contextMenus.onClicked.addListener()
 
 function btnNamer(btnName) {
   btnName = new URL(btnName);
@@ -36,7 +35,6 @@ for (var i = 0; i < savedItems; i++){
     pageBtn.className = 'dynamicButton';
     pastUrl = nameUrl;
     pastName = btnNamer(pastUrl);
-    // pageBtn.contentEditable = true;
     pageBtnName = (JSON.parse(window.localStorage.getItem(nameUrl)))[1];
     pageBtn.innerHTML = (pageBtnName);
     favIconURL = "chrome://favicon/size/23@1x/" + nameUrl;
@@ -64,9 +62,6 @@ for (var i = 0; i < savedItems; i++){
           }
         });
       })
-    });
-    pageBtn.addEventListener("mouseout",function() {
-      sessionStorage.setItem('pageFlag', ['down', null]);
     });
     myDiv.appendChild(pageBtn);
   }
@@ -97,7 +92,7 @@ for (var i = 0; i < savedItems; i++){
         });
       }
     }
-    testFlag = 1;
+    sessionRenameFlag = 1;
     sessionBtn.addEventListener("mouseover", function( event ) {
       chrome.contextMenus.onClicked.addListener((info, tab) => {
         chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
@@ -105,16 +100,19 @@ for (var i = 0; i < savedItems; i++){
             window.localStorage.removeItem(this.name);
             window.open('', '_blank').close();
           }
-          else if (info.menuItemId === "rename" && testFlag == 1) {
-            let newSessionName = prompt("Enter a new name:", String((JSON.parse(window.localStorage.getItem(this.name)))[1]));
-            console.log(newSessionName);
-            window.open('', '_blank').close();
+          else if (info.menuItemId === "rename" && sessionRenameFlag == 1) {
+            oldName = (JSON.parse(window.localStorage.getItem(this.name)));
+            let newSessionName = prompt("Enter a new name:", String(oldName[1]));
+            oldName[1] = newSessionName;
+            window.localStorage.setItem(String(this.name), JSON.stringify(oldName));
+            sessionRenameFlag+=1;
+            window.close();
           }
         });
       })
     });
     sessionBtn.addEventListener("mouseout",function() {
-      testFlag = 0;
+      testFlag = 1;
     });
     myDiv.appendChild(sessionBtn);
   }
