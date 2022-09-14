@@ -1,3 +1,5 @@
+import {btnNamer} from 'popup.js';
+
 chrome.contextMenus.removeAll(function() {
   chrome.contextMenus.create({
     "id": "savePage",
@@ -24,10 +26,18 @@ chrome.contextMenus.removeAll(function() {
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     if (info.menuItemId === "savePage") {
+      valueArray = [];
+      urlArray = [];
       url = tabs[0].url;
+      urlArray.push(url);
+      valueArray.push(urlArray);
       currentUrl = url;
-      window.localStorage.setItem(String(url), url);
+      currentName = btnNamer(currentUrl);
+      valueArray.push(currentName);
+      window.localStorage.setItem(String(url), JSON.stringify(valueArray));
     } 
   });
 })
 
+// cant add this func inside of popup because hover is req. it doesnt work rn
+// because of an issue with btnNamer i believe. fix issue.
