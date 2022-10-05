@@ -3,6 +3,13 @@ let saveSession = document.getElementById("saveSession");
 let clearAll = document.getElementById("clearAll");
 var myDiv = document.getElementById("dynamicBtnDiv");
 
+function nameTrimmer(btnName) {
+  if (btnName.length>19){
+    btnName = btnName.slice(0, 19)+"...";
+  }
+  return btnName;
+}
+
 function btnNamer(btnName) {
   btnName = new URL(btnName);
   btnName = btnName.hostname;
@@ -24,7 +31,7 @@ function btnNamer(btnName) {
   return btnName;
 }
 
-testFlag = 0;
+
 savedItems = parseInt(window.localStorage.length);
 var nameNum = 0;
 for (var i = 0; i < savedItems; i++){
@@ -53,12 +60,21 @@ for (var i = 0; i < savedItems; i++){
         url: newUrl
       });
     }
+    pageRenameFlag = 1;
     pageBtn.addEventListener("mouseover", function( event ) {
       chrome.contextMenus.onClicked.addListener((info, tab) => {
         chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
           if (info.menuItemId === "deletePage") {
             window.localStorage.removeItem(this.name);
             window.open('', '_blank').close();
+          }
+          else if (info.menuItemId === "rename" && pageRenameFlag == 1) {
+            oldName = (JSON.parse(window.localStorage.getItem(this.name)));
+            let newPageName = prompt("Enter a new name:", String(oldName[1]));
+            oldName[1] = newPageName;
+            window.localStorage.setItem(String(this.name), JSON.stringify(oldName));
+            pageRenameFlag+=1;
+            window.close();
           }
         });
       })
@@ -92,6 +108,7 @@ for (var i = 0; i < savedItems; i++){
         });
       }
     }
+    console.log(this.name);
     sessionRenameFlag = 1;
     sessionBtn.addEventListener("mouseover", function( event ) {
       chrome.contextMenus.onClicked.addListener((info, tab) => {
@@ -111,9 +128,9 @@ for (var i = 0; i < savedItems; i++){
         });
       })
     });
-    sessionBtn.addEventListener("mouseout",function() {
-      testFlag = 1;
-    });
+    // sessionBtn.addEventListener("mouseout",function() {
+    //   // testFlag = 1;
+    // });
     myDiv.appendChild(sessionBtn);
   }
 }

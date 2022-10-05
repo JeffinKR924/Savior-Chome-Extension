@@ -1,4 +1,4 @@
-import {btnNamer} from 'popup.js';
+// import {btnNamer} from 'popup.js';
 
 chrome.contextMenus.removeAll(function() {
   chrome.contextMenus.create({
@@ -23,6 +23,27 @@ chrome.contextMenus.removeAll(function() {
   })
 });
 
+function btnNamer(btnName) {
+  btnName = new URL(btnName);
+  btnName = btnName.hostname;
+  btnName = btnName.toString();
+  subDomain = ["www.", "www4.", "www3.", ".com", ".net", ".org", ".co", ".us", ".gov", ".edu"];
+  for (var i =0; i < subDomain.length; i++){
+    btnName = btnName.replaceAll(subDomain[i], "");
+  }
+  btnName = btnName.charAt(0).toUpperCase()+btnName.slice(1);
+  checkSt = btnName.includes(".");
+  if (checkSt==true) {
+    checkIndex = btnName.indexOf(".");
+    btnName = btnName.slice(0, checkIndex+1)+btnName.charAt(checkIndex+1).toUpperCase()+btnName.slice(checkIndex+2);
+  }
+  btnName = btnName.trim();
+  if (btnName.length>19){
+    btnName = btnName.slice(0, 19)+"...";
+  }
+  return btnName;
+}
+
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     if (info.menuItemId === "savePage") {
@@ -38,6 +59,3 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     } 
   });
 })
-
-// cant add this func inside of popup because hover is req. it doesnt work rn
-// because of an issue with btnNamer i believe. fix issue.
