@@ -62,22 +62,29 @@ for (var i = 0; i < savedItems; i++){
     }
     pageRenameFlag = 1;
     pageBtn.addEventListener("mouseover", function( event ) {
+      hoverPageName = this.name;
+      // event.target.name, event.currentTarget.name, this.name?
+      // hoverPageName = event.currentTarget.name;
       chrome.contextMenus.onClicked.addListener((info, tab) => {
         chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
           if (info.menuItemId === "deletePage") {
-            window.localStorage.removeItem(this.name);
+            window.localStorage.removeItem(hoverPageName);
             window.open('', '_blank').close();
+            // console.log(hoverPageName);
           }
           else if (info.menuItemId === "rename" && pageRenameFlag == 1) {
-            oldName = (JSON.parse(window.localStorage.getItem(this.name)));
+            oldName = (JSON.parse(window.localStorage.getItem(hoverPageName)));
             let newPageName = prompt("Enter a new name:", String(oldName[1]));
             oldName[1] = newPageName;
-            window.localStorage.setItem(String(this.name), JSON.stringify(oldName));
+            window.localStorage.setItem(String(hoverPageName), JSON.stringify(oldName));
             pageRenameFlag+=1;
             window.close();
           }
         });
       })
+    });
+    pageBtn.addEventListener("mouseout", function() {
+      hoverPageName = null;
     });
     myDiv.appendChild(pageBtn);
   }
@@ -108,9 +115,9 @@ for (var i = 0; i < savedItems; i++){
         });
       }
     }
-    console.log(this.name);
     sessionRenameFlag = 1;
     sessionBtn.addEventListener("mouseover", function( event ) {
+      hoverSessionName = this.name;
       chrome.contextMenus.onClicked.addListener((info, tab) => {
         chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
           if (info.menuItemId === "deleteSession") {
@@ -118,19 +125,19 @@ for (var i = 0; i < savedItems; i++){
             window.open('', '_blank').close();
           }
           else if (info.menuItemId === "rename" && sessionRenameFlag == 1) {
-            oldName = (JSON.parse(window.localStorage.getItem(this.name)));
+            oldName = (JSON.parse(window.localStorage.getItem(hoverSessionName)));
             let newSessionName = prompt("Enter a new name:", String(oldName[1]));
             oldName[1] = newSessionName;
-            window.localStorage.setItem(String(this.name), JSON.stringify(oldName));
+            window.localStorage.setItem(String(hoverSessionName), JSON.stringify(oldName));
             sessionRenameFlag+=1;
             window.close();
           }
         });
       })
     });
-    // sessionBtn.addEventListener("mouseout",function() {
-    //   // testFlag = 1;
-    // });
+    sessionBtn.addEventListener("mouseout",function() {
+      hoverSessionName = null;
+    });
     myDiv.appendChild(sessionBtn);
   }
 }
@@ -214,3 +221,20 @@ clearAll.onclick = function (element) {
     window.open('', '_blank').close();
   }
 }
+
+// Renaming Works. Everything is renamed correctly.
+
+// Deleting one specific button deletes a bunch of them. Thats a problem. but
+// the remaning buttons seem to be correct and dont have any issues to them. They are ordered
+// correctly.
+
+// this.name seems to be working with rename functionality really well. I have not seen
+// any issues with that portion yet. this.name, currentTarget, and current have issues
+// with the delete page functionality. Have to find a reliable fix for that. Also, gotta
+// find a fix for that weird delay that causes you to hover over another button after
+// deleting page. Possible solution for this could be that it saves the last hovered button
+// name constantly and then uses other if statements to prevent deletion when you stop hovering
+// and press the delete button? Also, the session names face a serious bug rn with the naming
+// scheme. They can overlap if one button is deleted, since they are based on current length.
+// Can fix this issue by having a num for session that constantly goes up despite the length,
+// like a counter.
