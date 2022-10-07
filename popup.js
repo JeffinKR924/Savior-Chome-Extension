@@ -61,8 +61,14 @@ for (var i = 0; i < savedItems; i++){
       });
     }
     pageRenameFlag = 1;
-    pageBtn.addEventListener("mouseover", function( event ) {
-      hoverPageName = event.currentTarget.name;
+    pageBtn.addEventListener('mousedown', (ev) => {
+      if (ev.which === 3) {
+        objectName = ev.currentTarget.name;
+        console.log(objectName);
+      }
+    });
+    // pageBtn.addEventListener("mouseover", function( event ) {
+    //   hoverPageName = event.currentTarget.name;
       // console.log(event.currentTarget);
       // event.target.name, event.currentTarget.name, this.name?
       // hoverPageName = event.currentTarget.name;
@@ -70,37 +76,7 @@ for (var i = 0; i < savedItems; i++){
       // The only explanation is that it attaches to a button and doesnt call The
       // top parent, just the bottom parent. so maybe if i add another check in
       // the bottom part then that might work
-      chrome.contextMenus.onClicked.addListener((info, tab) => {
-        chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-          if (info.menuItemId === "deletePage") {
-            // if (this.matches(':hover')){
-            //   console.log("plz");
-            // }
-            console.log(tab);
-            var x = event.clientX;
-            var y = event.clientY;
-            el = document.elementFromPoint(x, y);
-
-            // console.log(el);
-            // console.log(event.currentTarget);
-            window.localStorage.removeItem(hoverPageName);
-            // window.open('', '_blank').close();
-            // console.log(hoverPageName);
-          }
-          else if (info.menuItemId === "rename" && pageRenameFlag == 1) {
-            oldName = (JSON.parse(window.localStorage.getItem(hoverPageName)));
-            let newPageName = prompt("Enter a new name:", String(oldName[1]));
-            oldName[1] = newPageName;
-            window.localStorage.setItem(String(hoverPageName), JSON.stringify(oldName));
-            pageRenameFlag+=1;
-            window.close();
-          }
-        });
-      })
-    });
-    pageBtn.addEventListener("mouseout", function( event ) {
-
-    });
+    // });
     myDiv.appendChild(pageBtn);
   }
   else {
@@ -131,28 +107,28 @@ for (var i = 0; i < savedItems; i++){
       }
     }
     sessionRenameFlag = 1;
-    sessionBtn.addEventListener("mouseover", function( event ) {
-      hoverSessionName = this.name;
-      chrome.contextMenus.onClicked.addListener((info, tab) => {
-        chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-          if (info.menuItemId === "deleteSession") {
-            window.localStorage.removeItem(this.name);
-            window.open('', '_blank').close();
-          }
-          else if (info.menuItemId === "rename" && sessionRenameFlag == 1) {
-            oldName = (JSON.parse(window.localStorage.getItem(hoverSessionName)));
-            let newSessionName = prompt("Enter a new name:", String(oldName[1]));
-            oldName[1] = newSessionName;
-            window.localStorage.setItem(String(hoverSessionName), JSON.stringify(oldName));
-            sessionRenameFlag+=1;
-            window.close();
-          }
-        });
-      })
+    sessionBtn.addEventListener('mousedown', (ev) => {
+      if (ev.which === 3) {
+        objectName = ev.currentTarget;
+        console.log(objectName);
+      }
     });
-    sessionBtn.addEventListener("mouseout",function() {
-      hoverSessionName = null;
-    });
+    // chrome.contextMenus.onClicked.addListener((info, tab) => {
+    //   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+    //     if (info.menuItemId === "deleteSession") {
+    //       window.localStorage.removeItem(this.name);
+    //       window.open('', '_blank').close();
+    //     }
+    //     else if (info.menuItemId === "rename" && sessionRenameFlag == 1) {
+    //       oldName = (JSON.parse(window.localStorage.getItem(hoverSessionName)));
+    //       let newSessionName = prompt("Enter a new name:", String(oldName[1]));
+    //       oldName[1] = newSessionName;
+    //       window.localStorage.setItem(String(hoverSessionName), JSON.stringify(oldName));
+    //       sessionRenameFlag+=1;
+    //       window.close();
+    //     }
+    //   });
+    // })
     myDiv.appendChild(sessionBtn);
   }
 }
@@ -229,13 +205,48 @@ saveSession.onclick = function (element) {
 }); 
 }
 
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+    if (info.menuItemId === "deletePage") {
+      window.localStorage.removeItem(objectName);
+      window.open('', '_blank').close();
+    }
+    else if (info.menuItemId === "deleteSession") {
+      window.localStorage.removeItem(objectName);
+      window.open('', '_blank').close();
+    }
+    else if (info.menuItemId === "rename" && pageRenameFlag == 1) {
+      oldName = (JSON.parse(window.localStorage.getItem(hoverPageName)));
+      let newPageName = prompt("Enter a new name:", String(oldName[1]));
+      oldName[1] = newPageName;
+      window.localStorage.setItem(String(hoverPageName), JSON.stringify(oldName));
+      pageRenameFlag+=1;
+      window.close();
+    }
+    else if (info.menuItemId === "rename" && sessionRenameFlag == 1) {
+      oldName = (JSON.parse(window.localStorage.getItem(hoverSessionName)));
+      let newSessionName = prompt("Enter a new name:", String(oldName[1]));
+      oldName[1] = newSessionName;
+      window.localStorage.setItem(String(hoverSessionName), JSON.stringify(oldName));
+      sessionRenameFlag+=1;
+      window.close();
+    }
+  });
+})
+
 clearAll.onclick = function (element) {
   var result = confirm("Are you sure you want to delete all saved pages and sessions?");
   if (result) {
     window.localStorage.clear();
     window.open('', '_blank').close();
   }
-}
+};
+// window.addEventListener('mousedown', (event) => {
+//   if (event.which === 3) {
+//     divTest = event.target;
+//     console.log(divTest);
+//   }
+// });
 
 // Renaming Works. Everything is renamed correctly.
 
@@ -253,3 +264,9 @@ clearAll.onclick = function (element) {
 // scheme. They can overlap if one button is deleted, since they are based on current length.
 // Can fix this issue by having a num for session that constantly goes up despite the length,
 // like a counter.
+
+// The deletion works now. But now the issue is that if you right click on the button and
+// then right click on anywhere that is not a dynamic button and press delete, it deletes
+// the last right clicked button. I am thinking that if I add another window event listener
+// that generally checks to make sure that you arent right clicking the window or the save
+// utility buttons, then that could work maybe.
