@@ -62,14 +62,29 @@ for (var i = 0; i < savedItems; i++){
     }
     pageRenameFlag = 1;
     pageBtn.addEventListener("mouseover", function( event ) {
-      hoverPageName = this.name;
+      hoverPageName = event.currentTarget.name;
+      // console.log(event.currentTarget);
       // event.target.name, event.currentTarget.name, this.name?
       // hoverPageName = event.currentTarget.name;
+      // How is this bottom code being called when i am not on a button?
+      // The only explanation is that it attaches to a button and doesnt call The
+      // top parent, just the bottom parent. so maybe if i add another check in
+      // the bottom part then that might work
       chrome.contextMenus.onClicked.addListener((info, tab) => {
         chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
           if (info.menuItemId === "deletePage") {
+            // if (this.matches(':hover')){
+            //   console.log("plz");
+            // }
+            console.log(tab);
+            var x = event.clientX;
+            var y = event.clientY;
+            el = document.elementFromPoint(x, y);
+
+            // console.log(el);
+            // console.log(event.currentTarget);
             window.localStorage.removeItem(hoverPageName);
-            window.open('', '_blank').close();
+            // window.open('', '_blank').close();
             // console.log(hoverPageName);
           }
           else if (info.menuItemId === "rename" && pageRenameFlag == 1) {
@@ -83,8 +98,8 @@ for (var i = 0; i < savedItems; i++){
         });
       })
     });
-    pageBtn.addEventListener("mouseout", function() {
-      hoverPageName = null;
+    pageBtn.addEventListener("mouseout", function( event ) {
+
     });
     myDiv.appendChild(pageBtn);
   }
