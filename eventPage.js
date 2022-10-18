@@ -7,13 +7,8 @@ chrome.contextMenus.removeAll(function() {
     "contexts": ["all"]
   })
   chrome.contextMenus.create({
-    "id": "deletePage",
-    "title": "Delete Page",
-    "contexts": ["all"]
-  })
-  chrome.contextMenus.create({
-    "id": "deleteSession",
-    "title": "Delete Session",
+    "id": "delete",
+    "title": "Delete",
     "contexts": ["all"]
   })
   chrome.contextMenus.create({

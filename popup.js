@@ -60,13 +60,13 @@ for (var i = 0; i < savedItems; i++){
         url: newUrl
       });
     }
-    pageRenameFlag = 1;
-    pageBtn.addEventListener('mousedown', (ev) => {
-      if (ev.which === 3) {
-        objectName = ev.currentTarget.name;
-        console.log(objectName);
-      }
-    });
+    // pageRenameFlag = 1;
+    // pageBtn.addEventListener('mousedown', (ev) => {
+    //   if (ev.which === 3) {
+    //     objectName = ev.currentTarget;
+    //     console.log(objectName);
+    //   }
+    // });
     // pageBtn.addEventListener("mouseover", function( event ) {
     //   hoverPageName = event.currentTarget.name;
       // console.log(event.currentTarget);
@@ -106,13 +106,13 @@ for (var i = 0; i < savedItems; i++){
         });
       }
     }
-    sessionRenameFlag = 1;
-    sessionBtn.addEventListener('mousedown', (ev) => {
-      if (ev.which === 3) {
-        objectName = ev.currentTarget;
-        console.log(objectName);
-      }
-    });
+    // sessionRenameFlag = 1;
+    // sessionBtn.addEventListener('mousedown', (ev) => {
+    //   if (ev.which === 3) {
+    //     objectName = ev.currentTarget;
+    //     console.log(objectName);
+    //   }
+    // });
     // chrome.contextMenus.onClicked.addListener((info, tab) => {
     //   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     //     if (info.menuItemId === "deleteSession") {
@@ -207,13 +207,11 @@ saveSession.onclick = function (element) {
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-    if (info.menuItemId === "deletePage") {
-      window.localStorage.removeItem(objectName);
-      window.open('', '_blank').close();
-    }
-    else if (info.menuItemId === "deleteSession") {
-      window.localStorage.removeItem(objectName);
-      window.open('', '_blank').close();
+    if (info.menuItemId === "delete") {
+      if (objectName!= null) {
+        window.localStorage.removeItem(objectName);
+        window.open('', '_blank').close();
+      }
     }
     else if (info.menuItemId === "rename" && pageRenameFlag == 1) {
       oldName = (JSON.parse(window.localStorage.getItem(hoverPageName)));
@@ -241,12 +239,35 @@ clearAll.onclick = function (element) {
     window.open('', '_blank').close();
   }
 };
-// window.addEventListener('mousedown', (event) => {
-//   if (event.which === 3) {
-//     divTest = event.target;
-//     console.log(divTest);
-//   }
-// });
+window.addEventListener('mousedown', (event) => {
+  if (event.which === 3) {
+    divTest = String(event.target.className); 
+    obj = event.target;
+    console.log(divTest);
+    console.log(obj);
+    if (divTest == 'fa-solid fa-file' || divTest == 'favIcon') {
+      while(divTest != 'dynamicButton'){
+        obj = obj.parentElement;
+        divTest = String(obj.className);
+      }
+      objectName = obj.name
+    }
+    else if (divTest == 'dynamicButton') {
+      objectName = obj.name
+    }
+    else {
+      objectName = null;
+    }
+    console.log(objectName);
+    // try {
+    //   objectName = obj.name;
+    // }
+    // catch(error) {
+    //   objectName = null;
+    // }
+    // console.log(objectName);
+  }
+});
 
 // Renaming Works. Everything is renamed correctly.
 
