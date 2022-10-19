@@ -60,7 +60,7 @@ for (var i = 0; i < savedItems; i++){
         url: newUrl
       });
     }
-    // pageRenameFlag = 1;
+    pageRenameFlag = 1;
     // pageBtn.addEventListener('mousedown', (ev) => {
     //   if (ev.which === 3) {
     //     objectName = ev.currentTarget;
@@ -213,13 +213,14 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         window.open('', '_blank').close();
       }
     }
-    else if (info.menuItemId === "rename" && pageRenameFlag == 1) {
-      oldName = (JSON.parse(window.localStorage.getItem(hoverPageName)));
-      let newPageName = prompt("Enter a new name:", String(oldName[1]));
-      oldName[1] = newPageName;
-      window.localStorage.setItem(String(hoverPageName), JSON.stringify(oldName));
-      pageRenameFlag+=1;
-      window.close();
+    else if (info.menuItemId === "rename") {
+      if (objectName!= null) {
+        oldName = (JSON.parse(window.localStorage.getItem(objectName)));
+        let newPageName = prompt("Enter a new name:", String(oldName[1]));
+        oldName[1] = newPageName;
+        window.localStorage.setItem(String(objectName), JSON.stringify(oldName));
+        window.close();
+      }
     }
     else if (info.menuItemId === "rename" && sessionRenameFlag == 1) {
       oldName = (JSON.parse(window.localStorage.getItem(hoverSessionName)));
@@ -243,8 +244,6 @@ window.addEventListener('mousedown', (event) => {
   if (event.which === 3) {
     divTest = String(event.target.className); 
     obj = event.target;
-    console.log(divTest);
-    console.log(obj);
     if (divTest == 'fa-solid fa-file' || divTest == 'favIcon') {
       while(divTest != 'dynamicButton'){
         obj = obj.parentElement;
@@ -258,14 +257,6 @@ window.addEventListener('mousedown', (event) => {
     else {
       objectName = null;
     }
-    console.log(objectName);
-    // try {
-    //   objectName = obj.name;
-    // }
-    // catch(error) {
-    //   objectName = null;
-    // }
-    // console.log(objectName);
   }
 });
 
