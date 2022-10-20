@@ -222,13 +222,14 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         window.close();
       }
     }
-    else if (info.menuItemId === "rename" && sessionRenameFlag == 1) {
-      oldName = (JSON.parse(window.localStorage.getItem(hoverSessionName)));
-      let newSessionName = prompt("Enter a new name:", String(oldName[1]));
-      oldName[1] = newSessionName;
-      window.localStorage.setItem(String(hoverSessionName), JSON.stringify(oldName));
-      sessionRenameFlag+=1;
-      window.close();
+    else if (info.menuItemId === "rename") {
+      if (objectName!= null) {
+        oldName = (JSON.parse(window.localStorage.getItem(objectName)));
+        let newSessionName = prompt("Enter a new name:", String(oldName[1]));
+        oldName[1] = newSessionName;
+        window.localStorage.setItem(String(objectName), JSON.stringify(oldName));
+        window.close();
+      }
     }
   });
 })
@@ -244,7 +245,9 @@ window.addEventListener('mousedown', (event) => {
   if (event.which === 3) {
     divTest = String(event.target.className); 
     obj = event.target;
-    if (divTest == 'fa-solid fa-file' || divTest == 'favIcon') {
+    console.log(divTest);
+    console.log(obj);
+    if (divTest == 'fa-solid fa-file' || divTest == 'favIcon' || divTest == 'fa fa-folder') {
       while(divTest != 'dynamicButton'){
         obj = obj.parentElement;
         divTest = String(obj.className);
