@@ -216,23 +216,15 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     else if (info.menuItemId === "rename") {
       if (objectName!= null) {
         oldName = (JSON.parse(window.localStorage.getItem(objectName)));
-        let newPageName = prompt("Enter a new name:", String(oldName[1]));
-        oldName[1] = newPageName;
-        window.localStorage.setItem(String(objectName), JSON.stringify(oldName));
-        window.close();
-      }
-    }
-    else if (info.menuItemId === "rename") {
-      if (objectName!= null) {
-        oldName = (JSON.parse(window.localStorage.getItem(objectName)));
-        let newSessionName = prompt("Enter a new name:", String(oldName[1]));
-        oldName[1] = newSessionName;
+        let newName = prompt("Enter a new name:", String(oldName[1]));
+        oldName[1] = newName;
         window.localStorage.setItem(String(objectName), JSON.stringify(oldName));
         window.close();
       }
     }
   });
 })
+
 
 clearAll.onclick = function (element) {
   var result = confirm("Are you sure you want to delete all saved pages and sessions?");
@@ -245,8 +237,6 @@ window.addEventListener('mousedown', (event) => {
   if (event.which === 3) {
     divTest = String(event.target.className); 
     obj = event.target;
-    console.log(divTest);
-    console.log(obj);
     if (divTest == 'fa-solid fa-file' || divTest == 'favIcon' || divTest == 'fa fa-folder') {
       while(divTest != 'dynamicButton'){
         obj = obj.parentElement;
