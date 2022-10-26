@@ -60,7 +60,7 @@ for (var i = 0; i < savedItems; i++){
         url: newUrl
       });
     }
-    pageRenameFlag = 1;
+    // pageRenameFlag = 1;
     // pageBtn.addEventListener('mousedown', (ev) => {
     //   if (ev.which === 3) {
     //     objectName = ev.currentTarget;
@@ -155,6 +155,8 @@ save.onclick = function (element) {
     currentName = btnNamer(currentUrl);
     valueArray.push(currentName);
     window.localStorage.setItem(String(url), JSON.stringify(valueArray));
+    window.sessionStorage.setItem('currentPage', String(url));
+    // maybe if i can save url as a global var somehow that would fix the current issue?
     btn = document.createElement("BUTTON");
     btn.className = 'dynamicButton';
     btn.innerHTML = (currentName);
@@ -171,38 +173,43 @@ save.onclick = function (element) {
 
 saveSession.onclick = function (element) {
   chrome.tabs.query({lastFocusedWindow: true}, function(tabs) {
-    valueArray = [];
-    urlArray = [];
-    for (i = 0; i<tabs.length; i++){
-      url = tabs[i].url;
-      urlArray.push(url);
+    if (tabs.length==1){
+      save.onclick();
     }
-    valueArray.push(urlArray);
-    localStorageLength = (localStorage.length)+1;
-    valueArray.push("Session " + String(localStorageLength));
-    var arrayName = ("SESSION924"+urlArray.toString());
-    window.localStorage.setItem(String(arrayName), JSON.stringify(valueArray));
-    btn = document.createElement("BUTTON");
-    btn.className = 'dynamicButton';
-    btn.innerHTML = ("New Session");
-    favIconURL = "chrome://favicon/size/23@1x/" + (urlArray[0]);
-    var favIconImage = document.createElement('img');
-    favIconImage.src = favIconURL;
-    favIconImage.className = 'favIcon';
-    var faIconFolder = document.createElement("h5");
-    faIconFolder.innerHTML = '<i class="fa fa-folder"></i>';
-    faIconFolder.className = 'faIconFolders';
-    btn.appendChild(favIconImage);
-    btn.appendChild(faIconFolder);
-    myDiv.appendChild(btn);
-    btn.onclick = function() {
-      for (var a = 0; a < urlArray.length; a++) {
-        chrome.tabs.create({
-          url: urlArray[a]
-        });
+    else {
+      valueArray = [];
+      urlArray = [];
+      for (i = 0; i<tabs.length; i++){
+        url = tabs[i].url;
+        urlArray.push(url);
+      }
+      valueArray.push(urlArray);
+      localStorageLength = (localStorage.length)+1;
+      valueArray.push("Session " + String(localStorageLength));
+      var arrayName = ("SESSION924"+urlArray.toString());
+      window.localStorage.setItem(String(arrayName), JSON.stringify(valueArray));
+      btn = document.createElement("BUTTON");
+      btn.className = 'dynamicButton';
+      btn.innerHTML = ("New Session");
+      favIconURL = "chrome://favicon/size/23@1x/" + (urlArray[0]);
+      var favIconImage = document.createElement('img');
+      favIconImage.src = favIconURL;
+      favIconImage.className = 'favIcon';
+      var faIconFolder = document.createElement("h5");
+      faIconFolder.innerHTML = '<i class="fa fa-folder"></i>';
+      faIconFolder.className = 'faIconFolders';
+      btn.appendChild(favIconImage);
+      btn.appendChild(faIconFolder);
+      myDiv.appendChild(btn);
+      btn.onclick = function() {
+        for (var a = 0; a < urlArray.length; a++) {
+          chrome.tabs.create({
+            url: urlArray[a]
+          });
+        }
       }
     }
-}); 
+  }); 
 }
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
@@ -214,12 +221,31 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       }
     }
     else if (info.menuItemId === "rename") {
-      if (objectName!= null) {
+      if (objectName!= '') {
         oldName = (JSON.parse(window.localStorage.getItem(objectName)));
+        // console.log(oldName);
         let newName = prompt("Enter a new name:", String(oldName[1]));
         oldName[1] = newName;
         window.localStorage.setItem(String(objectName), JSON.stringify(oldName));
         window.close();
+      }
+      if (objectName == '' && divTest == 'dynamicButton') { 
+        arrayLength = valueArray[0].length;
+        if (arrayLength==1) {
+          oldName = (JSON.parse(window.localStorage.getItem(String(valueArray[0]))));
+          let newName = prompt("Enter a new name:", String(oldName[1]));
+          oldName[1] = newName;
+          window.localStorage.setItem(String(valueArray[0]), JSON.stringify(oldName));
+          window.close();
+        }
+        else{
+          keyName = ('SESSION924' + String(valueArray[0]));
+          oldName = (JSON.parse(window.localStorage.getItem(keyName)));
+          let newName = prompt("Enter a new name:", String(oldName[1]));
+          oldName[1] = newName;
+          window.localStorage.setItem(String(keyName), JSON.stringify(oldName));
+          window.close();
+        }
       }
     }
   });
@@ -237,6 +263,8 @@ window.addEventListener('mousedown', (event) => {
   if (event.which === 3) {
     divTest = String(event.target.className); 
     obj = event.target;
+    // console.log(divTest);
+    // console.log(obj);
     if (divTest == 'fa-solid fa-file' || divTest == 'favIcon' || divTest == 'fa fa-folder') {
       while(divTest != 'dynamicButton'){
         obj = obj.parentElement;
@@ -253,11 +281,9 @@ window.addEventListener('mousedown', (event) => {
   }
 });
 
-// Renaming Works. Everything is renamed correctly.
+// Fix it so you can rename right after button is saved and page hasnt closed
 
-// Deleting one specific button deletes a bunch of them. Thats a problem. but
-// the remaning buttons seem to be correct and dont have any issues to them. They are ordered
-// correctly.
+
 
 // this.name seems to be working with rename functionality really well. I have not seen
 // any issues with that portion yet. this.name, currentTarget, and current have issues
