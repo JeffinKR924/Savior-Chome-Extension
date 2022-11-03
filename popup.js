@@ -220,8 +220,6 @@ window.addEventListener('mousedown', (event) => {
   if (event.which === 3) {
     divTest = String(event.target.className); 
     obj = event.target;
-    // console.log(divTest);
-    // console.log(obj);
     if (divTest == 'fa-solid fa-file' || divTest == 'favIcon' || divTest == 'fa fa-folder') {
       while(divTest != 'dynamicButton'){
         obj = obj.parentElement;
@@ -235,16 +233,9 @@ window.addEventListener('mousedown', (event) => {
     else {
       objectName = null;
     }
-    // console.log(objectName);
-    // console.log(divTest);
-    // console.log(obj);
-    // buttons in just saved mode have a className, but not .name
   }
 });
 
-// BUG: When you save a button and a session at the same time and you are still in
-// just saved mode, the renaming functionality bugs out. It only lets you rename
-// the last saved item
 
 
 
