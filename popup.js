@@ -197,30 +197,12 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       }
     }
     else if (info.menuItemId === "rename") {
-      if (objectName!= null && objectName != '') {
+      if (objectName != null && objectName != '') {
         oldName = (JSON.parse(window.localStorage.getItem(objectName)));
         let newName = prompt("Enter a new name:", String(oldName[1]));
         oldName[1] = newName;
         window.localStorage.setItem(String(objectName), JSON.stringify(oldName));
         window.close();
-      }
-      if (objectName == '' && divTest == 'dynamicButton') { 
-        arrayLength = valueArray[0].length;
-        if (arrayLength==1) {
-          oldName = (JSON.parse(window.localStorage.getItem(String(valueArray[0]))));
-          let newName = prompt("Enter a new name:", String(oldName[1]));
-          oldName[1] = newName;
-          window.localStorage.setItem(String(valueArray[0]), JSON.stringify(oldName));
-          window.close();
-        }
-        else{
-          keyName = ('SESSION924' + String(valueArray[0]));
-          oldName = (JSON.parse(window.localStorage.getItem(keyName)));
-          let newName = prompt("Enter a new name:", String(oldName[1]));
-          oldName[1] = newName;
-          window.localStorage.setItem(String(keyName), JSON.stringify(oldName));
-          window.close();
-        }
       }
     }
   });
