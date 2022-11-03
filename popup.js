@@ -3,6 +3,22 @@ let saveSession = document.getElementById("saveSession");
 let clearAll = document.getElementById("clearAll");
 var myDiv = document.getElementById("dynamicBtnDiv");
 
+function buttonKeyIncrementer(btnType) {
+  if (btnType == 'page') {
+    keyNum = window.sessionStorage.getItem('pageKeyNum');
+    keyNum = keyNum + 1;
+    window.sessionStorage.setItem('pageKeyNum', keyNum);
+    newKeyName = ('PAGE924:N' + String(keyNum));
+  }
+  else {
+    keyNum = window.sessionStorage.getItem('sessionKeyNum');
+    keyNum = keyNum + 1;
+    window.sessionStorage.setItem('sessionKeyNum', keyNum);
+    newKeyName = ('SESSION924:N' + String(keyNum));
+  }
+  return(newKeyName);
+}
+
 function redundancyChecker(urlArray){
   savedItems = parseInt(window.localStorage.length);
   if (savedItems != 0) {
@@ -243,3 +259,8 @@ window.addEventListener('mousedown', (event) => {
 // scheme. They can overlap if one button is deleted, since they are based on current length.
 // Can fix this issue by having a num for session that constantly goes up despite the length,
 // like a counter.
+
+// We are going to use numeric keys for pages and sessions now. We are going to store these
+// keys in local session(although this might change if we move to local forage). There will
+// be one key for pages and one key for sessions. The digits will constantly increment
+// until the clear all button is pressed. 
