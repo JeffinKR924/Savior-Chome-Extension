@@ -131,6 +131,7 @@ save.onclick = function (element) {
     btn = document.createElement("BUTTON");
     btn.className = 'dynamicButton';
     btn.innerHTML = (currentName);
+    btn.name = urlArray;
     btn.appendChild(favIconImage);
     btn.appendChild(faIconFile);
     btn.onclick = function() {
@@ -172,6 +173,7 @@ saveSession.onclick = function (element) {
       var faIconFolder = document.createElement("h5");
       faIconFolder.innerHTML = '<i class="fa fa-folder"></i>';
       faIconFolder.className = 'faIconFolders';
+      btn.name = arrayName;
       btn.appendChild(favIconImage);
       btn.appendChild(faIconFolder);
       myDiv.appendChild(btn);
@@ -189,13 +191,31 @@ saveSession.onclick = function (element) {
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     if (info.menuItemId === "delete") {
-      if (objectName != '') {
+      if (objectName != null && objectName != '') {
+        // console.log("one got called");
+        // window.localStorage.removeItem(objectName);
+        // window.open('', '_blank').close();
+        // console.log(objectName);
         window.localStorage.removeItem(objectName);
         window.open('', '_blank').close();
       }
+      // if (objectName == '' && divTest == 'dynamicButton') { 
+      //   arrayLength = valueArray[0].length;
+      //   // console.log(valueArray);
+      //   if (arrayLength==1) {
+      //     tempName = ((JSON.parse(window.localStorage.getItem(String(valueArray[0]))))[0]);
+      //     window.localStorage.removeItem(tempName);
+      //     // window.open('', '_blank').close();
+      //   }
+      //   else {
+      //     keyName = ('SESSION924' + String(valueArray[0]));
+      //     window.localStorage.removeItem(keyName);
+      //     // window.open('', '_blank').close();
+      //   }
+      // }
     }
     else if (info.menuItemId === "rename") {
-      if (objectName!= '') {
+      if (objectName!= null && objectName != '') {
         oldName = (JSON.parse(window.localStorage.getItem(objectName)));
         let newName = prompt("Enter a new name:", String(oldName[1]));
         oldName[1] = newName;
@@ -236,6 +256,8 @@ window.addEventListener('mousedown', (event) => {
   if (event.which === 3) {
     divTest = String(event.target.className); 
     obj = event.target;
+    // console.log(divTest);
+    // console.log(obj);
     if (divTest == 'fa-solid fa-file' || divTest == 'favIcon' || divTest == 'fa fa-folder') {
       while(divTest != 'dynamicButton'){
         obj = obj.parentElement;
@@ -249,18 +271,20 @@ window.addEventListener('mousedown', (event) => {
     else {
       objectName = null;
     }
+    // console.log(objectName);
+    // console.log(divTest);
+    // console.log(obj);
+    // buttons in just saved mode have a className, but not .name
   }
 });
 
-// Deleting button when it is in just saved mode has not been created yet
 // BUG: When you save a button and a session at the same time and you are still in
 // just saved mode, the renaming functionality bugs out. It only lets you rename
 // the last saved item
-// TODO FIRST: Reread the rename functionality to defintively understand what you did
 
 
 
-//  Also, the session names face a serious bug rn with the naming
+// Also, the session names face a serious bug rn with the naming
 // scheme. They can overlap if one button is deleted, since they are based on current length.
 // Can fix this issue by having a num for session that constantly goes up despite the length,
 // like a counter.
