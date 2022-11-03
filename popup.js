@@ -192,27 +192,9 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     if (info.menuItemId === "delete") {
       if (objectName != null && objectName != '') {
-        // console.log("one got called");
-        // window.localStorage.removeItem(objectName);
-        // window.open('', '_blank').close();
-        // console.log(objectName);
         window.localStorage.removeItem(objectName);
         window.open('', '_blank').close();
       }
-      // if (objectName == '' && divTest == 'dynamicButton') { 
-      //   arrayLength = valueArray[0].length;
-      //   // console.log(valueArray);
-      //   if (arrayLength==1) {
-      //     tempName = ((JSON.parse(window.localStorage.getItem(String(valueArray[0]))))[0]);
-      //     window.localStorage.removeItem(tempName);
-      //     // window.open('', '_blank').close();
-      //   }
-      //   else {
-      //     keyName = ('SESSION924' + String(valueArray[0]));
-      //     window.localStorage.removeItem(keyName);
-      //     // window.open('', '_blank').close();
-      //   }
-      // }
     }
     else if (info.menuItemId === "rename") {
       if (objectName!= null && objectName != '') {
