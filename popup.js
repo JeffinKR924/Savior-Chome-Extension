@@ -271,9 +271,9 @@ window.addEventListener('mousedown', (event) => {
 });
 
 
-localforage.setItem('myuniquekey', 010101010);
-test = localforage.getItem('myuniquekey');
-console.log(test);
+// localforage.setItem('myuniquekey', 010101010);
+// test = localforage.getItem('myuniquekey');
+// console.log(test);
 
 
 
