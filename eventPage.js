@@ -1,5 +1,3 @@
-// import {btnNamer} from 'popup.js';
-
 chrome.contextMenus.removeAll(function() {
   chrome.contextMenus.create({
     "id": "savePage",

@@ -16,6 +16,7 @@
   },
   "permissions": [
    "chrome://favicon/",
+   "https://cdn.rawgit.com/mozilla/localForage/master/dist/localforage.js",
    "activeTab",
    "declarativeContent",
    "storage",
@@ -23,5 +24,5 @@
    "contextMenus",
    "tabs"
    ],
-   "content_security_policy": "script-src 'self'; object-src 'self'; img-src chrome://favicon;"
+   "content_security_policy": "script-src 'self'; object-src 'self'; img-src chrome://favicon; script-src 'self' https://cdn.rawgit.com/; object-src 'self';"
 }

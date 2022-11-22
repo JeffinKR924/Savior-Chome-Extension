@@ -1,3 +1,5 @@
+// import localforage from "./localForage/src/localforage.js";
+
 let save = document.getElementById("save");
 let saveSession = document.getElementById("saveSession");
 let clearAll = document.getElementById("clearAll");
@@ -6,14 +8,27 @@ var myDiv = document.getElementById("dynamicBtnDiv");
 function buttonKeyIncrementer(btnType) {
   if (btnType == 'page') {
     keyNum = window.sessionStorage.getItem('pageKeyNum');
-    keyNum = keyNum + 1;
-    window.sessionStorage.setItem('pageKeyNum', keyNum);
+    if (keyNum == null) {
+      console.log('bruh');
+      keyNum = 1;
+      window.sessionStorage.setItem('pageKeyNum', keyNum);
+    }
+    else {
+      keyNum = keyNum + 1;
+      window.sessionStorage.setItem('pageKeyNum', keyNum);
+    }
     newKeyName = ('PAGE924:N' + String(keyNum));
   }
   else {
     keyNum = window.sessionStorage.getItem('sessionKeyNum');
-    keyNum = keyNum + 1;
-    window.sessionStorage.setItem('sessionKeyNum', keyNum);
+    if (keyNum == null) {
+      keyNum = 1;
+      window.sessionStorage.setItem('sessionKeyNum', keyNum);
+    }
+    else {
+      keyNum = keyNum + 1;
+      window.sessionStorage.setItem('sessionKeyNum', keyNum);
+    }
     newKeyName = ('SESSION924:N' + String(keyNum));
   }
   return(newKeyName);
@@ -141,8 +156,9 @@ save.onclick = function (element) {
     currentUrl = url;
     currentName = btnNamer(currentUrl);
     valueArray.push(currentName);
+    key = buttonKeyIncrementer('page');
     if (redun == false) {
-      window.localStorage.setItem(String(url), JSON.stringify(valueArray));
+      window.localStorage.setItem(key, JSON.stringify(valueArray));
     }
     btn = document.createElement("BUTTON");
     btn.className = 'dynamicButton';
@@ -176,8 +192,9 @@ saveSession.onclick = function (element) {
       localStorageLength = (localStorage.length)+1;
       valueArray.push("Session " + String(localStorageLength));
       var arrayName = ("SESSION924"+urlArray.toString());
+      key = buttonKeyIncrementer('page');
       if (redun == false) {
-        window.localStorage.setItem(String(arrayName), JSON.stringify(valueArray));
+        window.localStorage.setItem(key, JSON.stringify(valueArray));
       }
       btn = document.createElement("BUTTON");
       btn.className = 'dynamicButton';
@@ -236,6 +253,7 @@ window.addEventListener('mousedown', (event) => {
   if (event.which === 3) {
     divTest = String(event.target.className); 
     obj = event.target;
+    keyNum = window.sessionStorage.getItem('pageKeyNum');
     if (divTest == 'fa-solid fa-file' || divTest == 'favIcon' || divTest == 'fa fa-folder') {
       while(divTest != 'dynamicButton'){
         obj = obj.parentElement;
@@ -253,6 +271,12 @@ window.addEventListener('mousedown', (event) => {
 });
 
 
+localforage.setItem('myuniquekey', 010101010);
+test = localforage.getItem('myuniquekey');
+console.log(test);
+
+
+
 
 
 // Also, the session names face a serious bug rn with the naming
@@ -264,3 +288,6 @@ window.addEventListener('mousedown', (event) => {
 // keys in local session(although this might change if we move to local forage). There will
 // be one key for pages and one key for sessions. The digits will constantly increment
 // until the clear all button is pressed. 
+
+// BUG: local session data only lasts while the tab is still open. so it would not work for
+// my use case. the only real fix i see is moving to local forage now
