@@ -117,7 +117,7 @@ for (var i = 0; i < savedItems; i++){
     sessionBtn.innerHTML = sessionBtnName;
     sessionFavIcon = (JSON.parse(window.localStorage.getItem(nameUrl)))[0];
     arrVal = String((JSON.parse(window.localStorage.getItem(nameUrl)))[0][0]);
-    const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=27`;
+    const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
     var favIconImage = document.createElement('img');
     favIconImage.src = favIconURL;
     favIconImage.className = 'favIcon';
@@ -149,7 +149,7 @@ save.onclick = function (element) {
     urlArray.push(url);
     redun = redundancyChecker(urlArray);
     valueArray.push(urlArray);
-    const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=27`;
+    const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=23`;
     var favIconImage = document.createElement('img');
     favIconImage.src = favIconURL;
     favIconImage.className = 'favIcon';
@@ -207,7 +207,7 @@ saveSession.onclick = function (element) {
       btn.className = 'dynamicButton';
       btn.innerHTML = ("New Session");
       arrVal = String(urlArray[0]);
-      const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=27`;
+      const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
       var favIconImage = document.createElement('img');
       favIconImage.src = favIconURL;
       favIconImage.className = 'favIcon';
