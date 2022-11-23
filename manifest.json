@@ -19,10 +19,10 @@
    "declarativeContent",
    "storage",
    "contextMenus",
-   "tabs"
+   "tabs",
+   "favicon"
    ],
    "host_permissions": [
-    "chrome://favicon/",
     "<all_urls>"
   ],
    "content_security_policy": {

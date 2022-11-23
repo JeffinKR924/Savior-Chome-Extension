@@ -9,7 +9,6 @@ function buttonKeyIncrementer(btnType) {
   if (btnType == 'page') {
     keyNum = window.sessionStorage.getItem('pageKeyNum');
     if (keyNum == null) {
-      console.log('bruh');
       keyNum = 1;
       window.sessionStorage.setItem('pageKeyNum', keyNum);
     }
@@ -82,6 +81,7 @@ var nameNum = 0;
 for (var i = 0; i < savedItems; i++){
   nameUrl = localStorage.key(i);
   arrayTest = nameUrl.startsWith("SESSION924");
+  console.log(nameUrl);
   if (arrayTest == false) {
     pageBtn = document.createElement("button");
     pageBtn.className = 'dynamicButton';
@@ -89,7 +89,8 @@ for (var i = 0; i < savedItems; i++){
     pastName = btnNamer(pastUrl);
     pageBtnName = (JSON.parse(window.localStorage.getItem(nameUrl)))[1];
     pageBtn.innerHTML = (pageBtnName);
-    favIconURL = "chrome://favicon/size/23@1x/" + nameUrl;
+    arrVal = String((JSON.parse(window.localStorage.getItem(nameUrl)))[0]);
+    const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
     var favIconImage = document.createElement('img');
     favIconImage.src = favIconURL;
     favIconImage.className = 'favIcon';
@@ -108,13 +109,15 @@ for (var i = 0; i < savedItems; i++){
     myDiv.appendChild(pageBtn);
   }
   else {
+    console.log('hello');
     sessionBtn = document.createElement("button");
     sessionBtn.className = 'dynamicButton';
     nameNum+=1;
     sessionBtnName = (JSON.parse(window.localStorage.getItem(nameUrl)))[1];
     sessionBtn.innerHTML = sessionBtnName;
     sessionFavIcon = (JSON.parse(window.localStorage.getItem(nameUrl)))[0];
-    favIconURL = "chrome://favicon/size/23@1x/" + (sessionFavIcon);
+    arrVal = String((JSON.parse(window.localStorage.getItem(nameUrl)))[0][0]);
+    const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=27`;
     var favIconImage = document.createElement('img');
     favIconImage.src = favIconURL;
     favIconImage.className = 'favIcon';
@@ -146,7 +149,7 @@ save.onclick = function (element) {
     urlArray.push(url);
     redun = redundancyChecker(urlArray);
     valueArray.push(urlArray);
-    favIconURL = "chrome://favicon/size/23@1x/" + url;
+    const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=27`;
     var favIconImage = document.createElement('img');
     favIconImage.src = favIconURL;
     favIconImage.className = 'favIcon';
@@ -178,28 +181,33 @@ save.onclick = function (element) {
 saveSession.onclick = function (element) {
   chrome.tabs.query({lastFocusedWindow: true}, function(tabs) {
     if (tabs.length==1){
+      console.log('hello');
       save.onclick();
     }
     else {
+    //   console.log('zaza');
       valueArray = [];
       urlArray = [];
       for (i = 0; i<tabs.length; i++){
         url = tabs[i].url;
         urlArray.push(url);
       }
+      // console.log(urlArray);
       redun = redundancyChecker(urlArray);
       valueArray.push(urlArray);
+      // console.log(valueArray);
       localStorageLength = (localStorage.length)+1;
       valueArray.push("Session " + String(localStorageLength));
       var arrayName = ("SESSION924"+urlArray.toString());
-      key = buttonKeyIncrementer('page');
+      key = buttonKeyIncrementer('session');
       if (redun == false) {
         window.localStorage.setItem(key, JSON.stringify(valueArray));
       }
       btn = document.createElement("BUTTON");
       btn.className = 'dynamicButton';
       btn.innerHTML = ("New Session");
-      favIconURL = "chrome://favicon/size/23@1x/" + (urlArray[0]);
+      arrVal = String(urlArray[0]);
+      const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=27`;
       var favIconImage = document.createElement('img');
       favIconImage.src = favIconURL;
       favIconImage.className = 'favIcon';
