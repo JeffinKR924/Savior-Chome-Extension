@@ -16,10 +16,10 @@
   },
   "permissions": [
    "activeTab",
-   "declarativeContent",
    "storage",
    "contextMenus",
    "tabs",
+   "declarativeContent",
    "favicon"
    ],
    "host_permissions": [
