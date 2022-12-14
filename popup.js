@@ -7,26 +7,26 @@ var myDiv = document.getElementById("dynamicBtnDiv");
 
 function buttonKeyIncrementer(btnType) {
   if (btnType == 'page') {
-    keyNum = window.sessionStorage.getItem('pageKeyNum');
+    keyNum = window.localStorage.getItem('pageKeyNum');
     if (keyNum == null) {
       keyNum = 1;
-      window.sessionStorage.setItem('pageKeyNum', keyNum);
+      window.localStorage.setItem('pageKeyNum', keyNum);
     }
     else {
-      keyNum = keyNum + 1;
-      window.sessionStorage.setItem('pageKeyNum', keyNum);
+      keyNum = parseInt(keyNum) + 1;
+      window.localStorage.setItem('pageKeyNum', keyNum);
     }
     newKeyName = ('PAGE924:N' + String(keyNum));
   }
   else {
-    keyNum = window.sessionStorage.getItem('sessionKeyNum');
+    keyNum = window.localStorage.getItem('sessionKeyNum');
     if (keyNum == null) {
       keyNum = 1;
-      window.sessionStorage.setItem('sessionKeyNum', keyNum);
+      window.localStorage.setItem('sessionKeyNum', keyNum);
     }
     else {
-      keyNum = keyNum + 1;
-      window.sessionStorage.setItem('sessionKeyNum', keyNum);
+      keyNum = parseInt(keyNum) + 1;
+      window.localStorage.setItem('sessionKeyNum', keyNum);
     }
     newKeyName = ('SESSION924:N' + String(keyNum));
   }
@@ -40,10 +40,12 @@ function redundancyChecker(urlArray){
       storageKey = localStorage.key(i);
       storageVal = (JSON.parse(window.localStorage.getItem(storageKey)))[0];
       if (JSON.stringify(storageVal) == JSON.stringify(urlArray)){
+        console.log('true');
         return true;
       }
     }
   }
+  console.log('false');
   return false;
 }
 
@@ -80,9 +82,9 @@ savedItems = parseInt(window.localStorage.length);
 var nameNum = 0;
 for (var i = 0; i < savedItems; i++){
   nameUrl = localStorage.key(i);
-  arrayTest = nameUrl.startsWith("SESSION924");
-  console.log(nameUrl);
-  if (arrayTest == false) {
+  // arrayTest = nameUrl.startsWith("SESSION924");
+  // console.log(nameUrl);
+  if (nameUrl.startsWith("PAGE924")) {
     pageBtn = document.createElement("button");
     pageBtn.className = 'dynamicButton';
     pastUrl = nameUrl;
@@ -108,8 +110,8 @@ for (var i = 0; i < savedItems; i++){
     }
     myDiv.appendChild(pageBtn);
   }
-  else {
-    console.log('hello');
+  else if (nameUrl.startsWith("SESSION924")) {
+    // console.log('hello');
     sessionBtn = document.createElement("button");
     sessionBtn.className = 'dynamicButton';
     nameNum+=1;
@@ -159,8 +161,8 @@ save.onclick = function (element) {
     currentUrl = url;
     currentName = btnNamer(currentUrl);
     valueArray.push(currentName);
-    key = buttonKeyIncrementer('page');
     if (redun == false) {
+      key = buttonKeyIncrementer('page');
       window.localStorage.setItem(key, JSON.stringify(valueArray));
     }
     btn = document.createElement("BUTTON");
@@ -199,8 +201,8 @@ saveSession.onclick = function (element) {
       localStorageLength = (localStorage.length)+1;
       valueArray.push("Session " + String(localStorageLength));
       var arrayName = ("SESSION924"+urlArray.toString());
-      key = buttonKeyIncrementer('session');
       if (redun == false) {
+        key = buttonKeyIncrementer('session');
         window.localStorage.setItem(key, JSON.stringify(valueArray));
       }
       btn = document.createElement("BUTTON");
@@ -261,7 +263,7 @@ window.addEventListener('mousedown', (event) => {
   if (event.which === 3) {
     divTest = String(event.target.className); 
     obj = event.target;
-    keyNum = window.sessionStorage.getItem('pageKeyNum');
+    keyNum = window.localStorage.getItem('pageKeyNum');
     if (divTest == 'fa-solid fa-file' || divTest == 'favIcon' || divTest == 'fa fa-folder') {
       while(divTest != 'dynamicButton'){
         obj = obj.parentElement;
@@ -278,6 +280,15 @@ window.addEventListener('mousedown', (event) => {
   }
 });
 
+// let tester;
+
+// chrome.storage.local.set({ mykey: "010101" });
+
+// chrome.storage.local.get(['mykey'], function(result) {
+//   tester = result.mykey;
+// });
+
+
 
 // localforage.setItem('myuniquekey', 010101010);
 // test = localforage.getItem('myuniquekey');
@@ -285,6 +296,12 @@ window.addEventListener('mousedown', (event) => {
 
 
 
+
+// The only bug i see is that chrome.tabs.query() will get the tabs of the last focused window,
+// so if the last focused window is another chrome window or chrome inspect page, and you press
+// one of the save buttons without refocusing on the previous window, then chrome.tabs will
+// retrieve the url of the previously focused window and not the window that opened the
+// extension
 
 
 // Also, the session names face a serious bug rn with the naming

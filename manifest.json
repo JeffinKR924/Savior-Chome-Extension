@@ -20,12 +20,13 @@
    "contextMenus",
    "tabs",
    "declarativeContent",
-   "favicon"
+   "declarativeNetRequest",
+   "favicon",
+   "declarativeNetRequestWithHostAccess",
+   "declarativeNetRequestFeedback",
+   "unlimitedStorage"
    ],
    "host_permissions": [
     "<all_urls>"
-  ],
-   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
-   }
+  ]
 }
