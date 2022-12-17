@@ -5,32 +5,84 @@ let saveSession = document.getElementById("saveSession");
 let clearAll = document.getElementById("clearAll");
 var myDiv = document.getElementById("dynamicBtnDiv");
 
-function buttonKeyIncrementer(btnType) {
+// function buttonKeyIncrementer(btnType) {
+//   let keyNum;
+//   let newKeyName;
+//   if (btnType == 'page') {
+//     return localforage.getItem('pageKeyNum').then((value) => {
+//       keyNum = value;
+//       // console.log(keyNum);
+//       if (keyNum == null) {
+//         keyNum = 1;
+//         localforage.setItem('pageKeyNum', keyNum);
+//       }
+//       else {
+//         keyNum = parseInt(keyNum) + 1;
+//         localforage.setItem('pageKeyNum', keyNum);
+//       }
+//       newKeyName = ('PAGE924:N' + String(keyNum));
+//       console.log(newKeyName);
+//       return Promise.resolve(newKeyName);  // Return a Promise that resolves to the newKeyName value
+//     }).then((newKeyName) => {  // Extract the value of newKeyName from the Promise
+//       console.log(newKeyName);
+//       return newKeyName;  // Return the value of newKeyName
+//     });
+//   }
+//   else {
+//     return localforage.getItem('sessionKeyNum').then((value) => {
+//       keyNum = value;
+//       if (keyNum == null) {
+//         keyNum = 1;
+//         localforage.setItem('sessionKeyNum', keyNum);
+//       }
+//       else {
+//         keyNum = parseInt(keyNum) + 1;
+//         localforage.setItem('sessionKeyNum', keyNum);
+//       }
+//       newKeyName = ('SESSION924:N' + String(keyNum));
+//       return Promise.resolve(newKeyName);  // Return a Promise that resolves to the newKeyName value
+//     }).then((newKeyName) => {  // Extract the value of newKeyName from the Promise
+//       return newKeyName;  // Return the value of newKeyName
+//     });
+//   }
+// }
+
+async function buttonKeyIncrementer(btnType) {
+  let keyNum;
+  let newKeyName;
   if (btnType == 'page') {
-    keyNum = window.localStorage.getItem('pageKeyNum');
-    if (keyNum == null) {
-      keyNum = 1;
-      window.localStorage.setItem('pageKeyNum', keyNum);
-    }
-    else {
-      keyNum = parseInt(keyNum) + 1;
-      window.localStorage.setItem('pageKeyNum', keyNum);
-    }
-    newKeyName = ('PAGE924:N' + String(keyNum));
+    newKeyName = await localforage.getItem('pageKeyNum').then((value) => {
+      keyNum = value;
+      // console.log(keyNum);
+      if (keyNum == null) {
+        keyNum = 1;
+        localforage.setItem('pageKeyNum', keyNum);
+      }
+      else {
+        keyNum = parseInt(keyNum) + 1;
+        localforage.setItem('pageKeyNum', keyNum);
+      }
+      newKeyName = ('PAGE924:N' + String(keyNum));
+      // console.log(newKeyName);
+      return Promise.resolve(newKeyName);  // Return a Promise that resolves to the newKeyName value
+    });
   }
   else {
-    keyNum = window.localStorage.getItem('sessionKeyNum');
-    if (keyNum == null) {
-      keyNum = 1;
-      window.localStorage.setItem('sessionKeyNum', keyNum);
-    }
-    else {
-      keyNum = parseInt(keyNum) + 1;
-      window.localStorage.setItem('sessionKeyNum', keyNum);
-    }
-    newKeyName = ('SESSION924:N' + String(keyNum));
+    newKeyName = await localforage.getItem('sessionKeyNum').then((value) => {
+      keyNum = value;
+      if (keyNum == null) {
+        keyNum = 1;
+        localforage.setItem('sessionKeyNum', keyNum);
+      }
+      else {
+        keyNum = parseInt(keyNum) + 1;
+        localforage.setItem('sessionKeyNum', keyNum);
+      }
+      newKeyName = ('SESSION924:N' + String(keyNum));
+      return Promise.resolve(newKeyName);  // Return a Promise that resolves to the newKeyName value
+    });
   }
-  return(newKeyName);
+  return newKeyName;
 }
 
 function redundancyChecker(urlArray){
@@ -40,12 +92,12 @@ function redundancyChecker(urlArray){
       storageKey = localStorage.key(i);
       storageVal = (JSON.parse(window.localStorage.getItem(storageKey)))[0];
       if (JSON.stringify(storageVal) == JSON.stringify(urlArray)){
-        console.log('true');
+        // console.log('true');
         return true;
       }
     }
   }
-  console.log('false');
+  // console.log('false');
   return false;
 }
 
@@ -78,70 +130,74 @@ function btnNamer(btnName) {
 }
 
 
-savedItems = parseInt(window.localStorage.length);
+
+
+
 var nameNum = 0;
-for (var i = 0; i < savedItems; i++){
-  nameUrl = localStorage.key(i);
-  // arrayTest = nameUrl.startsWith("SESSION924");
-  // console.log(nameUrl);
-  if (nameUrl.startsWith("PAGE924")) {
-    pageBtn = document.createElement("button");
-    pageBtn.className = 'dynamicButton';
-    pastUrl = nameUrl;
-    pastName = btnNamer(pastUrl);
-    pageBtnName = (JSON.parse(window.localStorage.getItem(nameUrl)))[1];
-    pageBtn.innerHTML = (pageBtnName);
-    arrVal = String((JSON.parse(window.localStorage.getItem(nameUrl)))[0]);
-    const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
-    var favIconImage = document.createElement('img');
-    favIconImage.src = favIconURL;
-    favIconImage.className = 'favIcon';
-    var faIconFile = document.createElement("h5");
-    faIconFile.innerHTML = '<i class="fa-solid fa-file"></i>';
-    faIconFile.className = 'faIconFiles';
-    pageBtn.appendChild(favIconImage);
-    pageBtn.appendChild(faIconFile);
-    pageBtn.name = nameUrl;
-    pageBtn.onclick = function() {
-      newUrl = String((JSON.parse(window.localStorage.getItem(this.name)))[0]);
-      chrome.tabs.create({
-        url: newUrl
-      });
-    }
-    myDiv.appendChild(pageBtn);
-  }
-  else if (nameUrl.startsWith("SESSION924")) {
-    // console.log('hello');
-    sessionBtn = document.createElement("button");
-    sessionBtn.className = 'dynamicButton';
-    nameNum+=1;
-    sessionBtnName = (JSON.parse(window.localStorage.getItem(nameUrl)))[1];
-    sessionBtn.innerHTML = sessionBtnName;
-    sessionFavIcon = (JSON.parse(window.localStorage.getItem(nameUrl)))[0];
-    arrVal = String((JSON.parse(window.localStorage.getItem(nameUrl)))[0][0]);
-    const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
-    var favIconImage = document.createElement('img');
-    favIconImage.src = favIconURL;
-    favIconImage.className = 'favIcon';
-    var faIconFolder = document.createElement("h5");
-    faIconFolder.innerHTML = '<i class="fa fa-folder"></i>';
-    faIconFolder.className = 'faIconFolders';
-    sessionBtn.appendChild(favIconImage);
-    sessionBtn.appendChild(faIconFolder);
-    var btnTypeIcon
-    sessionBtn.name = nameUrl;
-    sessionBtn.id = String(nameNum);
-    sessionBtn.onclick = function() {
-      session = (JSON.parse(window.localStorage.getItem(this.name)))[0];
-      for (var z = 0; z < session.length; z++) {
-        chrome.tabs.create({
-          url: session[z]
-        });
+localforage.length().then(function (length) {
+  savedItems = length;
+  for (var i = 0; i < savedItems; i++){
+    localforage.key(i).then(function (nameUrl) {
+      // console.log(nameUrl);
+      // arrayTest = nameUrl.startsWith("SESSION924");
+      // console.log(nameUrl);
+      // console.log(nameUrl);
+      if (nameUrl.startsWith("PAGE924")) {
+        pageBtn = document.createElement("button");
+        pageBtn.className = 'dynamicButton';
+        pastUrl = nameUrl;
+        pastName = btnNamer(pastUrl);
+        var favIconImage = document.createElement('img');
+        localforage.getItem(nameUrl).then((value) => {
+          pageBtnName = (JSON.parse(value))[1];
+          pageBtn.innerHTML = (pageBtnName);
+          arrVal = (String((JSON.parse(value))[0]));
+          // console.log(arrVal);
+          const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
+          favIconImage.src = favIconURL;
+          favIconImage.className = 'favIcon';
+          var faIconFile = document.createElement("h5");
+          faIconFile.innerHTML = '<i class="fa-solid fa-file"></i>';
+          faIconFile.className = 'faIconFiles';
+          pageBtn.appendChild(favIconImage);
+          pageBtn.appendChild(faIconFile);
+          pageBtn.name = nameUrl;
+          pageBtn.onclick = function() {
+            newUrl = String((JSON.parse(localforage.getItem(this.name)))[0]);
+            chrome.tabs.create({
+              url: newUrl
+            });
+          }
+          console.log('appended:' + nameUrl);
+          myDiv.appendChild(pageBtn);
+        })
+
       }
-    }
-    myDiv.appendChild(sessionBtn);
+      else if (nameUrl.startsWith("SESSION924")) {
+        // console.log('hello');
+        sessionBtn = document.createElement("button");
+        sessionBtn.className = 'dynamicButton';
+        nameNum+=1;
+        sessionBtnName = (JSON.parse(localforage.getItem(nameUrl))[1]);
+        sessionBtn.innerHTML = sessionBtnName;
+        sessionFavIcon = (JSON.parse(localforage.getItem(nameUrl))[0]);
+        arrVal = String((JSON.parse(localforage.getItem(nameUrl)))[0][0]);
+        const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
+        var favIconImage = document.createElement('img');
+        favIconImage.src = favIconURL;
+        favIconImage.className = 'favIcon';
+        var faIconFolder = document.createElement("h5");
+        faIconFolder.innerHTML = '<i class="fa fa-folder"></i>';
+        faIconFolder.className = 'faIconFolders';
+        sessionBtn.appendChild(favIconImage);
+        sessionBtn.appendChild(faIconFolder);
+        var btnTypeIcon
+        sessionBtn.name = nameUrl;
+        sessionBtn.id = String(nameNum);
+      }
+    })
   }
-}
+})
 
 save.onclick = function (element) {
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
@@ -162,8 +218,12 @@ save.onclick = function (element) {
     currentName = btnNamer(currentUrl);
     valueArray.push(currentName);
     if (redun == false) {
-      key = buttonKeyIncrementer('page');
-      window.localStorage.setItem(key, JSON.stringify(valueArray));
+      async function callingFunction() {
+        const key = await buttonKeyIncrementer('page');
+        console.log(key);
+        localforage.setItem(key, JSON.stringify(valueArray));
+      }
+      callingFunction();
     }
     btn = document.createElement("BUTTON");
     btn.className = 'dynamicButton';
@@ -180,10 +240,11 @@ save.onclick = function (element) {
   });
 }
 
+
 saveSession.onclick = function (element) {
   chrome.tabs.query({lastFocusedWindow: true}, function(tabs) {
     if (tabs.length==1){
-      console.log('hello');
+      // console.log('hello');
       save.onclick();
     }
     else {
@@ -198,12 +259,16 @@ saveSession.onclick = function (element) {
       redun = redundancyChecker(urlArray);
       valueArray.push(urlArray);
       // console.log(valueArray);
-      localStorageLength = (localStorage.length)+1;
+      localStorageLength = Math.floor(Math.random()*100);
       valueArray.push("Session " + String(localStorageLength));
       var arrayName = ("SESSION924"+urlArray.toString());
       if (redun == false) {
-        key = buttonKeyIncrementer('session');
-        window.localStorage.setItem(key, JSON.stringify(valueArray));
+        async function callingFunction() {
+          const key = await buttonKeyIncrementer('page');
+          console.log(key);
+          localforage.setItem(key, JSON.stringify(valueArray));
+        }
+        callingFunction();
       }
       btn = document.createElement("BUTTON");
       btn.className = 'dynamicButton';
@@ -256,6 +321,7 @@ clearAll.onclick = function (element) {
   var result = confirm("Are you sure you want to delete all saved pages and sessions?");
   if (result) {
     window.localStorage.clear();
+    localforage.clear();
     window.open('', '_blank').close();
   }
 };
@@ -316,3 +382,5 @@ window.addEventListener('mousedown', (event) => {
 
 // BUG: local session data only lasts while the tab is still open. so it would not work for
 // my use case. the only real fix i see is moving to local forage now
+
+
