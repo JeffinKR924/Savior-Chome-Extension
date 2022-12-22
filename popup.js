@@ -118,15 +118,17 @@ async function createButtons() {
         pageBtn.appendChild(faIconFile);
         pageBtn.name = nameUrl;
         pageBtn.onclick = function() {
-          newUrl = String((JSON.parse(localforage.getItem(this.name)))[0]);
-          chrome.tabs.create({
-            url: newUrl
-          });
-        }
-        myDiv.appendChild(pageBtn);
-      })
-
-    }
+          // newUrl = String((JSON.parse(localforage.getItem(this.name)))[0]);
+          localforage.getItem(this.name).then((page) => {
+            page = String((JSON.parse(page))[0]);
+            chrome.tabs.create({
+              url: page
+            });
+        })
+      }
+      myDiv.appendChild(pageBtn);
+    })
+  }
     else if (nameUrl.startsWith("SESSION924")) {
       sessionBtn = document.createElement("button");
       sessionBtn.className = 'dynamicButton';
@@ -233,15 +235,19 @@ saveSession.onclick = function (element) {
       // console.log(urlArray);
       valueArray.push(urlArray);
       // console.log(valueArray);
-      localStorageLength = Math.floor(Math.random()*100);
-      valueArray.push("Session " + String(localStorageLength));
+      // localStorageLength = Math.floor(Math.random()*100);
+      // valueArray.push("Session " + String(localStorageLength));
       var arrayName = ("SESSION924"+urlArray.toString());
       redundancyChecker(urlArray).then(redun => {
         console.log(redun);
         if (redun == false) {
           async function callingFunction() {
             const key = await buttonKeyIncrementer('session');
+            btnVisibleName = key.replace('SESSION924:N', '');
+            valueArray.push("Session " + btnVisibleName);
             localforage.setItem(key, JSON.stringify(valueArray));
+            // console.log(btnVisibleName);
+
           }
           callingFunction();
         }
