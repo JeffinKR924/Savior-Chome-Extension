@@ -58,13 +58,6 @@ async function redundancyChecker(urlArray) {
   return false;
 }
 
-
-
-
-
-
-
-
 function nameTrimmer(btnName) {
   if (btnName.length>19){
     btnName = btnName.slice(0, 19)+"...";
