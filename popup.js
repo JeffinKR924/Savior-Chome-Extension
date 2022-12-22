@@ -5,47 +5,6 @@ let saveSession = document.getElementById("saveSession");
 let clearAll = document.getElementById("clearAll");
 var myDiv = document.getElementById("dynamicBtnDiv");
 
-// function buttonKeyIncrementer(btnType) {
-//   let keyNum;
-//   let newKeyName;
-//   if (btnType == 'page') {
-//     return localforage.getItem('pageKeyNum').then((value) => {
-//       keyNum = value;
-//       // console.log(keyNum);
-//       if (keyNum == null) {
-//         keyNum = 1;
-//         localforage.setItem('pageKeyNum', keyNum);
-//       }
-//       else {
-//         keyNum = parseInt(keyNum) + 1;
-//         localforage.setItem('pageKeyNum', keyNum);
-//       }
-//       newKeyName = ('PAGE924:N' + String(keyNum));
-//       console.log(newKeyName);
-//       return Promise.resolve(newKeyName);  // Return a Promise that resolves to the newKeyName value
-//     }).then((newKeyName) => {  // Extract the value of newKeyName from the Promise
-//       console.log(newKeyName);
-//       return newKeyName;  // Return the value of newKeyName
-//     });
-//   }
-//   else {
-//     return localforage.getItem('sessionKeyNum').then((value) => {
-//       keyNum = value;
-//       if (keyNum == null) {
-//         keyNum = 1;
-//         localforage.setItem('sessionKeyNum', keyNum);
-//       }
-//       else {
-//         keyNum = parseInt(keyNum) + 1;
-//         localforage.setItem('sessionKeyNum', keyNum);
-//       }
-//       newKeyName = ('SESSION924:N' + String(keyNum));
-//       return Promise.resolve(newKeyName);  // Return a Promise that resolves to the newKeyName value
-//     }).then((newKeyName) => {  // Extract the value of newKeyName from the Promise
-//       return newKeyName;  // Return the value of newKeyName
-//     });
-//   }
-// }
 
 async function buttonKeyIncrementer(btnType) {
   let keyNum;
@@ -85,21 +44,26 @@ async function buttonKeyIncrementer(btnType) {
   return newKeyName;
 }
 
-function redundancyChecker(urlArray){
-  savedItems = parseInt(window.localStorage.length);
-  if (savedItems != 0) {
-    for (var i = 0; i < savedItems; i++){
-      storageKey = localStorage.key(i);
-      storageVal = (JSON.parse(window.localStorage.getItem(storageKey)))[0];
-      if (JSON.stringify(storageVal) == JSON.stringify(urlArray)){
-        // console.log('true');
+async function redundancyChecker(urlArray) {
+  let savedItems = await localforage.length();
+  if (savedItems !== 0) {
+    for (let i = 0; i < savedItems; i++) {
+      let storageKey = await localforage.key(i);
+      let storageVal = (JSON.parse(await localforage.getItem(storageKey)))[0];
+      if (JSON.stringify(storageVal) === JSON.stringify(urlArray)) {
         return true;
       }
     }
   }
-  // console.log('false');
   return false;
 }
+
+
+
+
+
+
+
 
 function nameTrimmer(btnName) {
   if (btnName.length>19){
@@ -129,19 +93,11 @@ function btnNamer(btnName) {
   return btnName;
 }
 
-
-
-
-
 var nameNum = 0;
 async function createButtons() {
   let savedItems = await localforage.length();
   for (var i = 0; i < savedItems; i++){
     let nameUrl = await localforage.key(i);    
-    // console.log(nameUrl);
-    // arrayTest = nameUrl.startsWith("SESSION924");
-    // console.log(nameUrl);
-    // console.log(nameUrl);
     if (nameUrl.startsWith("PAGE924")) {
       pageBtn = document.createElement("button");
       pageBtn.className = 'dynamicButton';
@@ -221,7 +177,6 @@ save.onclick = function (element) {
     urlArray = [];
     url = tabs[0].url;
     urlArray.push(url);
-    redun = redundancyChecker(urlArray);
     valueArray.push(urlArray);
     const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=23`;
     var favIconImage = document.createElement('img');
@@ -233,14 +188,18 @@ save.onclick = function (element) {
     currentUrl = url;
     currentName = btnNamer(currentUrl);
     valueArray.push(currentName);
-    if (redun == false) {
-      async function callingFunction() {
-        const key = await buttonKeyIncrementer('page');
-        console.log(key);
-        localforage.setItem(key, JSON.stringify(valueArray));
+    redundancyChecker(urlArray).then(redun => {
+      // console.log(redun);
+      if (redun == false) {
+        async function callingFunction() {
+          const key = await buttonKeyIncrementer('page');
+          // console.log(key);
+          localforage.setItem(key, JSON.stringify(valueArray));
+        }
+        callingFunction();
       }
-      callingFunction();
-    }
+    }); 
+
     btn = document.createElement("BUTTON");
     btn.className = 'dynamicButton';
     btn.innerHTML = (currentName);
@@ -272,19 +231,21 @@ saveSession.onclick = function (element) {
         urlArray.push(url);
       }
       // console.log(urlArray);
-      redun = redundancyChecker(urlArray);
       valueArray.push(urlArray);
       // console.log(valueArray);
       localStorageLength = Math.floor(Math.random()*100);
       valueArray.push("Session " + String(localStorageLength));
       var arrayName = ("SESSION924"+urlArray.toString());
-      if (redun == false) {
-        async function callingFunction() {
-          const key = await buttonKeyIncrementer('session');
-          localforage.setItem(key, JSON.stringify(valueArray));
+      redundancyChecker(urlArray).then(redun => {
+        console.log(redun);
+        if (redun == false) {
+          async function callingFunction() {
+            const key = await buttonKeyIncrementer('session');
+            localforage.setItem(key, JSON.stringify(valueArray));
+          }
+          callingFunction();
         }
-        callingFunction();
-      }
+      }); 
       btn = document.createElement("BUTTON");
       btn.className = 'dynamicButton';
       btn.innerHTML = ("New Session");
