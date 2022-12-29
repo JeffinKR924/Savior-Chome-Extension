@@ -49,7 +49,9 @@ async function redundancyChecker(urlArray) {
   if (savedItems !== 0) {
     for (let i = 0; i < savedItems; i++) {
       let storageKey = await localforage.key(i);
-      let storageVal = (JSON.parse(await localforage.getItem(storageKey)))[0];
+      let storageVal = JSON.parse((await localforage.getItem(storageKey)))[0];
+      // console.log(JSON.stringify(storageVal));
+      // console.log(JSON.stringify(urlArray));
       if (JSON.stringify(storageVal) === JSON.stringify(urlArray)) {
         return true;
       }
@@ -98,9 +100,11 @@ async function createButtons() {
       pastName = btnNamer(pastUrl);
       var favIconImage = document.createElement('img');
       localforage.getItem(nameUrl).then((value) => {
-        pageBtnName = (JSON.parse(value))[1];
+        pageBtnName = (JSON.parse((value)))[1];
+        // console.log(pageBtnName);
         pageBtn.innerHTML = (pageBtnName);
         arrVal = (String((JSON.parse(value))[0]));
+        console.log(arrVal);
         const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
         favIconImage.src = favIconURL;
         favIconImage.className = 'favIcon';
@@ -142,9 +146,6 @@ async function createButtons() {
         sessionBtn.id = String(nameNum);
         sessionBtn.appendChild(favIconImage);
         sessionBtn.appendChild(faIconFolder);
-        var btnTypeIcon
-        sessionBtn.name = nameUrl;
-        sessionBtn.id = String(nameNum);
         sessionBtn.onclick = function() {
           localforage.getItem(this.name).then((session) => {
             session = (JSON.parse(session))[0];
@@ -184,7 +185,7 @@ save.onclick = function (element) {
     currentName = btnNamer(currentUrl);
     valueArray.push(currentName);
     redundancyChecker(urlArray).then(redun => {
-      // console.log(redun);
+      console.log(redun);
       if (redun == false) {
         async function callingFunction() {
           const key = await buttonKeyIncrementer('page');
@@ -275,36 +276,61 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     if (info.menuItemId === "delete") {
       if (objectName != null && objectName != '') {
-        window.localStorage.removeItem(objectName);
+        localforage.removeItem(objectName);
         window.open('', '_blank').close();
       }
     }
     else if (info.menuItemId === "rename") {
       if (objectName != null && objectName != '') {
-        oldName = (JSON.parse(window.localStorage.getItem(objectName)));
-        let newName = prompt("Enter a new name:", String(oldName[1]));
-        oldName[1] = newName;
-        window.localStorage.setItem(String(objectName), JSON.stringify(oldName));
-        window.close();
+        oldName = null;
+        localforage.getItem(objectName).then((value) => {
+          oldName = JSON.parse(value);
+          let newName = prompt("Enter a new name:", String(oldName[1]));
+          oldName[1] = newName;
+          localforage.setItem(String(objectName), oldName);
+          window.close();
+      });
       }
     }
   });
-})
+});
+
+
+
+// chrome.contextMenus.onClicked.addListener((info, tab) => {
+//   chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+//     if (info.menuItemId === "delete") {
+//       if (objectName != null && objectName != '') {
+//         window.localStorage.removeItem(objectName);
+//         window.open('', '_blank').close();
+//       }
+//     }
+//     else if (info.menuItemId === "rename") {
+//       if (objectName != null && objectName != '') {
+//         oldName = (JSON.parse(window.localStorage.getItem(objectName)));
+//         let newName = prompt("Enter a new name:", String(oldName[1]));
+//         oldName[1] = newName;
+//         window.localStorage.setItem(String(objectName), JSON.stringify(oldName));
+//         window.close();
+//       }
+//     }
+//   });
+// })
 
 
 clearAll.onclick = function (element) {
   var result = confirm("Are you sure you want to delete all saved pages and sessions?");
   if (result) {
-    window.localStorage.clear();
     localforage.clear();
     window.open('', '_blank').close();
   }
 };
+
 window.addEventListener('mousedown', (event) => {
   if (event.which === 3) {
     divTest = String(event.target.className); 
     obj = event.target;
-    keyNum = window.localStorage.getItem('pageKeyNum');
+    // keyNum = window.localStorage.getItem('pageKeyNum');
     if (divTest == 'fa-solid fa-file' || divTest == 'favIcon' || divTest == 'fa fa-folder') {
       while(divTest != 'dynamicButton'){
         obj = obj.parentElement;
