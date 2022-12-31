@@ -1,5 +1,7 @@
 // import localforage from "./localForage/src/localforage.js";
 
+const { key } = require("localforage");
+
 let save = document.getElementById("save");
 let saveSession = document.getElementById("saveSession");
 let clearAll = document.getElementById("clearAll");
@@ -92,7 +94,8 @@ var nameNum = 0;
 async function createButtons() {
   let savedItems = await localforage.length();
   for (var i = 0; i < savedItems; i++){
-    let nameUrl = await localforage.key(i);    
+    let nameUrl = await localforage.key(i);
+    console.log(i); 
     if (nameUrl.startsWith("PAGE924")) {
       pageBtn = document.createElement("button");
       pageBtn.className = 'dynamicButton';
@@ -133,6 +136,8 @@ async function createButtons() {
       var favIconImage = document.createElement('img');
       localforage.getItem(nameUrl).then((value) => {
         sessionBtnName = (JSON.parse(value))[1];
+        console.log(sessionBtnName);
+        
         sessionBtn.innerHTML = sessionBtnName;
         sessionFavIcon = ((JSON.parse(value))[0]);
         arrVal = String((JSON.parse(value))[0][0]);
@@ -287,7 +292,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
           oldName = JSON.parse(value);
           let newName = prompt("Enter a new name:", String(oldName[1]));
           oldName[1] = newName;
-          localforage.setItem(String(objectName), oldName);
+          localforage.setItem(String(objectName), JSON.stringify(oldName));
           window.close();
       });
       }
@@ -349,6 +354,24 @@ window.addEventListener('mousedown', (event) => {
 
 
 
+// So how the localforage order works right now isnt based on when the item is added to the
+// database, instead it is based on the alphabetical/numerical order of the key. Also, the order
+// does not follow a 10 digit numerical order, instead, i believe it follow a binary numerical
+// order. So, 11 would come before 2 due to 1 coming before 2. I was thinking at first to convert
+// the pagekeynum to a binary digit and have a binary digit appended to each page key name. This
+// might not work after sessions are implemented because sessionkeynum has a different alphabetical
+// and numerical order. All of the page would always appear before the sessions since "p" comes
+// before "s". So the complicated fix would be to make both sessions and pages follow the same
+// naming scheme and only have one incrementing value that increments for both sessions and pages
+// as one. The better fix i think would be to have a loop that runs through each key name and
+// uses comparison operators to evaluate which value came first. However, the issue still arises
+// that sessions follow their own numeric naming scheme. So maybe we would still have to only have
+// a single incrementing key that increments for both sessions and pages as one. This key would
+// have to be outside of the loop though, and would have to determine which button to first create
+// so i would have to change the createbutton function significantly. but i think it would still be
+// more efficient and easier to change than changing the naming scheme completely.
+
+
 
 // The only bug i see is that chrome.tabs.query() will get the tabs of the last focused window,
 // so if the last focused window is another chrome window or chrome inspect page, and you press
@@ -356,18 +379,5 @@ window.addEventListener('mousedown', (event) => {
 // retrieve the url of the previously focused window and not the window that opened the
 // extension
 
-
-// Also, the session names face a serious bug rn with the naming
-// scheme. They can overlap if one button is deleted, since they are based on current length.
-// Can fix this issue by having a num for session that constantly goes up despite the length,
-// like a counter.
-
-// We are going to use numeric keys for pages and sessions now. We are going to store these
-// keys in local session(although this might change if we move to local forage). There will
-// be one key for pages and one key for sessions. The digits will constantly increment
-// until the clear all button is pressed. 
-
-// BUG: local session data only lasts while the tab is still open. so it would not work for
-// my use case. the only real fix i see is moving to local forage now
 
 
