@@ -68,6 +68,7 @@ function btnNamer(btnName) {
 }
 
 var nameNum = 0;
+orderCheckList = [];
 async function createButtons() {
   let savedItems = await localforage.length();
   compareVal = 1;
@@ -75,82 +76,85 @@ async function createButtons() {
     let nameUrl = await localforage.key(i);
     if (nameUrl.startsWith("BTN924")) {
       orderCheck = parseInt(nameUrl.replace("BTN924:N", ""));
-      // Take the orderCheck int num and append it to a list. Dont run rest of code underneath, just
-      // run loop again and append next int num to list. After loop has finished, use num.sort to 
-      // sort list. Then run a for loop that appends each num to BTN924:N and runs the rest of the
-      // code based on that new nameUrl. The rest of the code can be in a function or this func
-      let value = await localforage.getItem(nameUrl);
-      value = JSON.parse(value);
-      btnLen = (value[0].length)
-      if (btnLen == 1) {
-        pageBtn = document.createElement("button");
-        pageBtn.className = 'dynamicButton';
-        pastUrl = nameUrl;
-        pastName = btnNamer(pastUrl);
-        var favIconImage = document.createElement('img');
-        localforage.getItem(nameUrl).then((value) => {
-          pageBtnName = (JSON.parse((value)))[1];
-          // console.log(pageBtnName);
-          pageBtn.innerHTML = (pageBtnName);
-          arrVal = (String((JSON.parse(value))[0]));
-          // console.log(arrVal);
-          const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
-          favIconImage.src = favIconURL;
-          favIconImage.className = 'favIcon';
-          var faIconFile = document.createElement("h5");
-          faIconFile.innerHTML = '<i class="fa-solid fa-file"></i>';
-          faIconFile.className = 'faIconFiles';
-          pageBtn.appendChild(favIconImage);
-          pageBtn.appendChild(faIconFile);
-          pageBtn.name = nameUrl;
-          pageBtn.onclick = function() {
-            // newUrl = String((JSON.parse(localforage.getItem(this.name)))[0]);
-            localforage.getItem(this.name).then((page) => {
-              page = String((JSON.parse(page))[0]);
+      orderCheckList.push(orderCheck);
+    }
+  }
+  orderCheckList.sort(function(a, b) {
+    return a - b;
+  });
+  for (orderNum in orderCheckList) {
+    nameUrl = 'BTN924:N' + String(orderCheckList[orderNum]);
+    let value = await localforage.getItem(nameUrl);
+    value = JSON.parse(value);
+    btnLen = (value[0].length)
+    if (btnLen == 1) {
+      pageBtn = document.createElement("button");
+      pageBtn.className = 'dynamicButton';
+      pastUrl = nameUrl;
+      pastName = btnNamer(pastUrl);
+      var favIconImage = document.createElement('img');
+      localforage.getItem(nameUrl).then((value) => {
+        pageBtnName = (JSON.parse((value)))[1];
+        // console.log(pageBtnName);
+        pageBtn.innerHTML = (pageBtnName);
+        arrVal = (String((JSON.parse(value))[0]));
+        // console.log(arrVal);
+        const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
+        favIconImage.src = favIconURL;
+        favIconImage.className = 'favIcon';
+        var faIconFile = document.createElement("h5");
+        faIconFile.innerHTML = '<i class="fa-solid fa-file"></i>';
+        faIconFile.className = 'faIconFiles';
+        pageBtn.appendChild(favIconImage);
+        pageBtn.appendChild(faIconFile);
+        pageBtn.name = nameUrl;
+        pageBtn.onclick = function() {
+          // newUrl = String((JSON.parse(localforage.getItem(this.name)))[0]);
+          localforage.getItem(this.name).then((page) => {
+            page = String((JSON.parse(page))[0]);
+            chrome.tabs.create({
+              url: page
+            });
+          })
+        }
+      myDiv.appendChild(pageBtn);
+      })
+    }
+    else {
+      sessionBtn = document.createElement("button");
+      sessionBtn.className = 'dynamicButton';
+      nameNum+=1;
+      var favIconImage = document.createElement('img');
+      localforage.getItem(nameUrl).then((value) => {
+        sessionBtnName = (JSON.parse(value))[1];
+        // console.log(sessionBtnName);
+        
+        sessionBtn.innerHTML = sessionBtnName;
+        sessionFavIcon = ((JSON.parse(value))[0]);
+        arrVal = String((JSON.parse(value))[0][0]);
+        const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
+        favIconImage.src = favIconURL;
+        favIconImage.className = 'favIcon';
+        var faIconFolder = document.createElement("h5");
+        faIconFolder.innerHTML = '<i class="fa fa-folder"></i>';
+        faIconFolder.className = 'faIconFolders';
+        sessionBtn.name = nameUrl;
+        sessionBtn.id = String(nameNum);
+        sessionBtn.appendChild(favIconImage);
+        sessionBtn.appendChild(faIconFolder);
+        sessionBtn.onclick = function() {
+          localforage.getItem(this.name).then((session) => {
+            session = (JSON.parse(session))[0];
+            // session = (JSON.parse(window.localStorage.getItem(this.name)))[0];
+            for (var z = 0; z < session.length; z++) {
               chrome.tabs.create({
-                url: page
+                url: session[z]
               });
-            })
-          }
-        myDiv.appendChild(pageBtn);
-        })
-      }
-      else {
-        sessionBtn = document.createElement("button");
-        sessionBtn.className = 'dynamicButton';
-        nameNum+=1;
-        var favIconImage = document.createElement('img');
-        localforage.getItem(nameUrl).then((value) => {
-          sessionBtnName = (JSON.parse(value))[1];
-          // console.log(sessionBtnName);
-          
-          sessionBtn.innerHTML = sessionBtnName;
-          sessionFavIcon = ((JSON.parse(value))[0]);
-          arrVal = String((JSON.parse(value))[0][0]);
-          const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
-          favIconImage.src = favIconURL;
-          favIconImage.className = 'favIcon';
-          var faIconFolder = document.createElement("h5");
-          faIconFolder.innerHTML = '<i class="fa fa-folder"></i>';
-          faIconFolder.className = 'faIconFolders';
-          sessionBtn.name = nameUrl;
-          sessionBtn.id = String(nameNum);
-          sessionBtn.appendChild(favIconImage);
-          sessionBtn.appendChild(faIconFolder);
-          sessionBtn.onclick = function() {
-            localforage.getItem(this.name).then((session) => {
-              session = (JSON.parse(session))[0];
-              // session = (JSON.parse(window.localStorage.getItem(this.name)))[0];
-              for (var z = 0; z < session.length; z++) {
-                chrome.tabs.create({
-                  url: session[z]
-                });
-              }
-            })
-          }
-          myDiv.appendChild(sessionBtn);
-        })
-      }
+            }
+          })
+        }
+        myDiv.appendChild(sessionBtn);
+      })
     }
   }
 }
