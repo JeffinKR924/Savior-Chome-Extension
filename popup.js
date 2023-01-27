@@ -162,7 +162,9 @@ createButtons();
 
 
 save.onclick = function (element) {
-  chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+  chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+    // currentWindow seems to be working, but test it because i thought issues occured before when i
+// used it years ago
     valueArray = [];
     urlArray = [];
     url = tabs[0].url;
@@ -207,9 +209,9 @@ save.onclick = function (element) {
 
 
 saveSession.onclick = function (element) {
-  chrome.tabs.query({lastFocusedWindow: true}, function(tabs) {
+  chrome.tabs.query({currentWindow: true}, tabs => {
     if (tabs.length==1){
-      // console.log('hello');
+      console.log('hello');
       save.onclick();
     }
     else {
@@ -318,6 +320,25 @@ window.addEventListener('mousedown', (event) => {
     }
   }
 });
+
+chrome.runtime.onInstalled.addListener(function() {
+    chrome.management.getSelf(function(extensionInfo) {
+        console.log("getSelf: ", extensionInfo);
+        chrome.tabs.query({url: "chrome-extension://jgcbiapajnpiekmfmnohjmccjfafelbg/*"}, function(tabs) {
+            console.log("tabs: ", tabs);
+            var currentTab = tabs[0];
+            var tabId = currentTab.id;
+            chrome.tabs.get(tabId, function(tab) {
+                console.log("tab: ", tab);
+                var windowId = tab.windowId;
+                console.log("windowId: ", windowId);
+            });
+        });
+    });
+});
+
+
+
 
 
 
