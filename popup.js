@@ -202,6 +202,7 @@ save.onclick = function (element) {
       chrome.tabs.create({
         url: url
       });
+      console.log(url);
     }
     myDiv.appendChild(btn);
   });
@@ -337,35 +338,10 @@ chrome.runtime.onInstalled.addListener(function() {
     });
 });
 
+// The saved pages arent opening up the correct page on click. It is opening up the next page to
+// the right
 
 
-
-
-
-// So how the localforage order works right now isnt based on when the item is added to the
-// database, instead it is based on the alphabetical/numerical order of the key. Also, the order
-// does not follow a 10 digit numerical order, instead, i believe it follow a binary numerical
-// order. So, 11 would come before 2 due to 1 coming before 2. I was thinking at first to convert
-// the pagekeynum to a binary digit and have a binary digit appended to each page key name. This
-// might not work after sessions are implemented because sessionkeynum has a different alphabetical
-// and numerical order. All of the page would always appear before the sessions since "p" comes
-// before "s". So the complicated fix would be to make both sessions and pages follow the same
-// naming scheme and only have one incrementing value that increments for both sessions and pages
-// as one. The better fix i think would be to have a loop that runs through each key name and
-// uses comparison operators to evaluate which value came first. However, the issue still arises
-// that sessions follow their own numeric naming scheme. So maybe we would still have to only have
-// a single incrementing key that increments for both sessions and pages as one. This key would
-// have to be outside of the loop though, and would have to determine which button to first create
-// so i would have to change the createbutton function significantly. but i think it would still be
-// more efficient and easier to change than changing the naming scheme completely.
-
-
-
-// The only bug i see is that chrome.tabs.query() will get the tabs of the last focused window,
-// so if the last focused window is another chrome window or chrome inspect page, and you press
-// one of the save buttons without refocusing on the previous window, then chrome.tabs will
-// retrieve the url of the previously focused window and not the window that opened the
-// extension
 
 
 
