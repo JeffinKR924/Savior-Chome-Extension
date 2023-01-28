@@ -18,7 +18,7 @@ async function buttonKeyIncrementer() {
       localforage.setItem('btnKeyNum', keyNum);
     }
     newKeyName = ('BTN924:N' + String(keyNum));
-    return Promise.resolve(newKeyName);  // Return a Promise that resolves to the newKeyName value
+    return Promise.resolve(newKeyName);
   });
   return newKeyName;
 }
@@ -95,10 +95,8 @@ async function createButtons() {
       var favIconImage = document.createElement('img');
       localforage.getItem(nameUrl).then((value) => {
         pageBtnName = (JSON.parse((value)))[1];
-        // console.log(pageBtnName);
         pageBtn.innerHTML = (pageBtnName);
         arrVal = (String((JSON.parse(value))[0]));
-        // console.log(arrVal);
         const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
         favIconImage.src = favIconURL;
         favIconImage.className = 'favIcon';
@@ -109,13 +107,16 @@ async function createButtons() {
         pageBtn.appendChild(faIconFile);
         pageBtn.name = nameUrl;
         pageBtn.onclick = function() {
+          tab = (String((JSON.parse(value))[0]));
+          // console.log(value);
           // newUrl = String((JSON.parse(localforage.getItem(this.name)))[0]);
-          localforage.getItem(this.name).then((page) => {
-            page = String((JSON.parse(page))[0]);
-            chrome.tabs.create({
-              url: page
-            });
-          })
+          // localforage.getItem(this.name).then((page) => {
+          //   page = String((JSON.parse(page))[0]);
+            // console.log(page);
+          chrome.tabs.create({
+            url: tab
+          });
+          // })
         }
       myDiv.appendChild(pageBtn);
       })
@@ -339,7 +340,8 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 
 // The saved pages arent opening up the correct page on click. It is opening up the next page to
-// the right
+// the right.
+// Fixed page opening issue. Now just make sure sessions dont have the same problem.
 
 
 
