@@ -338,9 +338,8 @@ chrome.runtime.onInstalled.addListener(function() {
     });
 });
 
-// The saved pages arent opening up the correct page on click. It is opening up the next page to
-// the right.
-// Fixed page opening issue. Now just make sure sessions dont have the same problem.
+// New Bug: Right clicking and deleting a page causes the next page to delete. so deleting session
+// 1 deletes session 2 instead for some reason
 
 
 
