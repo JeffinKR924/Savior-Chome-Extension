@@ -128,8 +128,7 @@ async function createButtons() {
       var favIconImage = document.createElement('img');
       localforage.getItem(nameUrl).then((value) => {
         sessionBtnName = (JSON.parse(value))[1];
-        // console.log(sessionBtnName);
-        
+        sessionBtnName = sessionBtnName.replace("BTN924:N", "");
         sessionBtn.innerHTML = sessionBtnName;
         sessionFavIcon = ((JSON.parse(value))[0]);
         arrVal = String((JSON.parse(value))[0][0]);
@@ -144,15 +143,15 @@ async function createButtons() {
         sessionBtn.appendChild(favIconImage);
         sessionBtn.appendChild(faIconFolder);
         sessionBtn.onclick = function() {
-          localforage.getItem(this.name).then((session) => {
-            session = (JSON.parse(session))[0];
-            // session = (JSON.parse(window.localStorage.getItem(this.name)))[0];
-            for (var z = 0; z < session.length; z++) {
-              chrome.tabs.create({
-                url: session[z]
-              });
-            }
-          })
+          // localforage.getItem(this.name).then((session) => {
+          session = (JSON.parse(value))[0];
+          // session = (JSON.parse(window.localStorage.getItem(this.name)))[0];
+          for (var z = 0; z < session.length; z++) {
+            chrome.tabs.create({
+              url: session[z]
+            });
+          }
+          // })
         }
         myDiv.appendChild(sessionBtn);
       })
