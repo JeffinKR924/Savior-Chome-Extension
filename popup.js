@@ -311,7 +311,7 @@ window.addEventListener('mousedown', (event) => {
         obj = obj.parentElement;
         divTest = String(obj.className);
       }
-      objectName = obj.name
+      objectName = obj.name;
     }
     else if (divTest == 'dynamicButton') {
       objectName = obj.name
@@ -319,6 +319,7 @@ window.addEventListener('mousedown', (event) => {
     else {
       objectName = null;
     }
+    console.log(objectName);
   }
 });
 
@@ -339,7 +340,15 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 
 // New Bug: Right clicking and deleting a page causes the next page to delete. so deleting session
-// 1 deletes session 2 instead for some reason
+// 1 deletes session 2 instead for some reason. The problem is with mouse down windoweventlistener.
+// The problem cant be with the bubbling event.target thing that i worked on because clicking
+// directly on the button, not even the favicon or faicon, returns next button num.
+// Also nothing else is calling this mousedown event listener at all. Only right clicking calls
+// the function, that is the only way to run it.
+// Idea: I assign the name and details to a button in the async function, so it technically
+// should not be available outside of the scope of that function. The name is assigned to the
+// button inside of the async function, so maybe thats the problem. Maybe i need to make it
+// global somehow.
 
 
 
