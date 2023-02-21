@@ -84,9 +84,7 @@ async function createButtons() {
   });
   for (orderNum in orderCheckList) {
     nameUrl = 'BTN924:N' + String(orderCheckList[orderNum]);
-    console.log(nameUrl);
     let value = await localforage.getItem(nameUrl);
-    console.log(value);
     value = JSON.parse(value);
     btnLen = (value[0].length)
     if (btnLen == 1) {
@@ -95,71 +93,55 @@ async function createButtons() {
       pastUrl = nameUrl;
       pastName = btnNamer(pastUrl);
       var favIconImage = document.createElement('img');
-      localforage.getItem(nameUrl).then((value) => {
-        pageBtnName = (JSON.parse((value)))[1];
-        pageBtn.innerHTML = (pageBtnName);
-        arrVal = (String((JSON.parse(value))[0]));
-        const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
-        favIconImage.src = favIconURL;
-        favIconImage.className = 'favIcon';
-        var faIconFile = document.createElement("h5");
-        faIconFile.innerHTML = '<i class="fa-solid fa-file"></i>';
-        faIconFile.className = 'faIconFiles';
-        pageBtn.appendChild(favIconImage);
-        pageBtn.appendChild(faIconFile);
-        pageBtn.name = nameUrl;
-        // console.log(pageBtn.name);
-        // console.log(value+'\n\n');
-        // CHECK THIS OUT
-        pageBtn.onclick = function() {
-          tab = (String((JSON.parse(value))[0]));
-          // console.log(value);
-          // newUrl = String((JSON.parse(localforage.getItem(this.name)))[0]);
-          // localforage.getItem(this.name).then((page) => {
-          //   page = String((JSON.parse(page))[0]);
-            // console.log(page);
-          chrome.tabs.create({
-            url: tab
-          });
-          // })
-        }
+      pageBtnName = (((value)))[1];
+      pageBtn.innerHTML = (pageBtnName);
+      arrVal = (String(((value))[0]));
+      const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
+      favIconImage.src = favIconURL;
+      favIconImage.className = 'favIcon';
+      var faIconFile = document.createElement("h5");
+      faIconFile.innerHTML = '<i class="fa-solid fa-file"></i>';
+      faIconFile.className = 'faIconFiles';
+      pageBtn.appendChild(favIconImage);
+      pageBtn.appendChild(faIconFile);
+      pageBtn.name = nameUrl;
+      pageBtn.onclick = function() {
+        tab = (String((JSON.parse(value))[0]));
+        chrome.tabs.create({
+          url: tab
+        });
+      }
       myDiv.appendChild(pageBtn);
-      })
     }
     else {
       sessionBtn = document.createElement("button");
       sessionBtn.className = 'dynamicButton';
       nameNum+=1;
       var favIconImage = document.createElement('img');
-      localforage.getItem(nameUrl).then((value) => {
-        sessionBtnName = (JSON.parse(value))[1];
-        sessionBtnName = sessionBtnName.replace("BTN924:N", "");
-        sessionBtn.innerHTML = sessionBtnName;
-        sessionFavIcon = ((JSON.parse(value))[0]);
-        arrVal = String((JSON.parse(value))[0][0]);
-        const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
-        favIconImage.src = favIconURL;
-        favIconImage.className = 'favIcon';
-        var faIconFolder = document.createElement("h5");
-        faIconFolder.innerHTML = '<i class="fa fa-folder"></i>';
-        faIconFolder.className = 'faIconFolders';
-        sessionBtn.name = nameUrl;
-        sessionBtn.id = String(nameNum);
-        sessionBtn.appendChild(favIconImage);
-        sessionBtn.appendChild(faIconFolder);
-        sessionBtn.onclick = function() {
-          // localforage.getItem(this.name).then((session) => {
-          session = (JSON.parse(value))[0];
-          // session = (JSON.parse(window.localStorage.getItem(this.name)))[0];
-          for (var z = 0; z < session.length; z++) {
-            chrome.tabs.create({
-              url: session[z]
-            });
-          }
-          // })
+      sessionBtnName = ((value))[1];
+      sessionBtnName = sessionBtnName.replace("BTN924:N", "");
+      sessionBtn.innerHTML = sessionBtnName;
+      sessionFavIcon = (((value))[0]);
+      arrVal = String(((value))[0][0]);
+      const favIconURL = `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(arrVal)}&size=23`;
+      favIconImage.src = favIconURL;
+      favIconImage.className = 'favIcon';
+      var faIconFolder = document.createElement("h5");
+      faIconFolder.innerHTML = '<i class="fa fa-folder"></i>';
+      faIconFolder.className = 'faIconFolders';
+      sessionBtn.name = nameUrl;
+      sessionBtn.id = String(nameNum);
+      sessionBtn.appendChild(favIconImage);
+      sessionBtn.appendChild(faIconFolder);
+      sessionBtn.onclick = function() {
+        session = ((value))[0];
+        for (var z = 0; z < session.length; z++) {
+          chrome.tabs.create({
+            url: session[z]
+          });
         }
-        myDiv.appendChild(sessionBtn);
-      })
+      }
+      myDiv.appendChild(sessionBtn);
     }
   }
 }
