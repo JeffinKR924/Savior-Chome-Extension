@@ -84,7 +84,9 @@ async function createButtons() {
   });
   for (orderNum in orderCheckList) {
     nameUrl = 'BTN924:N' + String(orderCheckList[orderNum]);
+    console.log(nameUrl);
     let value = await localforage.getItem(nameUrl);
+    console.log(value);
     value = JSON.parse(value);
     btnLen = (value[0].length)
     if (btnLen == 1) {
@@ -106,6 +108,9 @@ async function createButtons() {
         pageBtn.appendChild(favIconImage);
         pageBtn.appendChild(faIconFile);
         pageBtn.name = nameUrl;
+        // console.log(pageBtn.name);
+        // console.log(value+'\n\n');
+        // CHECK THIS OUT
         pageBtn.onclick = function() {
           tab = (String((JSON.parse(value))[0]));
           // console.log(value);
@@ -187,13 +192,14 @@ save.onclick = function (element) {
           const key = await buttonKeyIncrementer();
           // console.log(key);
           localforage.setItem(key, JSON.stringify(valueArray));
+          btn.className = 'dynamicButton';
         }
         callingFunction();
       }
     }); 
 
     btn = document.createElement("BUTTON");
-    btn.className = 'dynamicButton';
+    // btn.className = 'dynamicButton';
     btn.innerHTML = (currentName);
     btn.name = urlArray;
     btn.appendChild(favIconImage);
@@ -303,9 +309,11 @@ clearAll.onclick = function (element) {
 };
 
 window.addEventListener('mousedown', (event) => {
+  console.log(event);
   if (event.which === 3) {
     divTest = String(event.target.className); 
     obj = event.target;
+    // console.log(obj);
     if (divTest == 'fa-solid fa-file' || divTest == 'favIcon' || divTest == 'fa fa-folder') {
       while(divTest != 'dynamicButton'){
         obj = obj.parentElement;
@@ -319,7 +327,7 @@ window.addEventListener('mousedown', (event) => {
     else {
       objectName = null;
     }
-    console.log(objectName);
+    // console.log(objectName);
   }
 });
 
@@ -349,6 +357,7 @@ chrome.runtime.onInstalled.addListener(function() {
 // should not be available outside of the scope of that function. The name is assigned to the
 // button inside of the async function, so maybe thats the problem. Maybe i need to make it
 // global somehow.
+// UPDATE: Issue lies in the createButtons function. Go to line 111.
 
 
 
