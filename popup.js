@@ -4,6 +4,37 @@ let clearAll = document.getElementById("clearAll");
 var myDiv = document.getElementById("dynamicBtnDiv");
 
 
+savePage();
+async function savePage() {
+  const result = await new Promise(resolve => {
+    chrome.storage.local.get(['tempData'], function(result) {
+      resolve(result);
+    });
+  });
+  
+  if (result.tempData) {
+    for (let i = 0; i < result.tempData.length; i++) {
+      valueArray = [];
+      urlArray = [];
+      urlArray.push(result.tempData[i]);
+      valueArray.push(urlArray);
+      currentUrl = result.tempData[i];
+      currentName = btnNamer(currentUrl);
+      valueArray.push(currentName);
+      const redun = await redundancyChecker(urlArray);
+      if (redun == false) {
+        const key = await buttonKeyIncrementer();
+        await localforage.setItem(key, JSON.stringify(valueArray));
+      }
+    }
+    chrome.storage.local.remove('tempData', function() {
+      console.log('Removed tempData');
+    });
+  }
+  createButtons();
+}
+
+
 async function buttonKeyIncrementer() {
   let keyNum;
   let newKeyName;
@@ -106,7 +137,7 @@ async function createButtons() {
       pageBtn.appendChild(faIconFile);
       pageBtn.name = nameUrl;
       pageBtn.onclick = function() {
-        tab = (String((JSON.parse(value))[0]));
+        tab = (String(((value))[0]));
         chrome.tabs.create({
           url: tab
         });
@@ -119,7 +150,6 @@ async function createButtons() {
       nameNum+=1;
       var favIconImage = document.createElement('img');
       sessionBtnName = ((value))[1];
-      sessionBtnName = sessionBtnName.replace("BTN924:N", "");
       sessionBtn.innerHTML = sessionBtnName;
       sessionFavIcon = (((value))[0]);
       arrVal = String(((value))[0][0]);
@@ -145,8 +175,7 @@ async function createButtons() {
     }
   }
 }
-createButtons();
-
+// createButtons();
 
 save.onclick = function (element) {
   chrome.tabs.query({active: true, currentWindow: true}, tabs => {
@@ -181,7 +210,6 @@ save.onclick = function (element) {
     }); 
 
     btn = document.createElement("BUTTON");
-    // btn.className = 'dynamicButton';
     btn.innerHTML = (currentName);
     btn.name = urlArray;
     btn.appendChild(favIconImage);
@@ -190,7 +218,7 @@ save.onclick = function (element) {
       chrome.tabs.create({
         url: url
       });
-      console.log(url);
+      // console.log(url);
     }
     myDiv.appendChild(btn);
   });
@@ -200,33 +228,24 @@ save.onclick = function (element) {
 saveSession.onclick = function (element) {
   chrome.tabs.query({currentWindow: true}, tabs => {
     if (tabs.length==1){
-      console.log('hello');
       save.onclick();
     }
     else {
-    //   console.log('zaza');
       valueArray = [];
       urlArray = [];
       for (i = 0; i<tabs.length; i++){
         url = tabs[i].url;
         urlArray.push(url);
       }
-      // console.log(urlArray);
       valueArray.push(urlArray);
-      // console.log(valueArray);
-      // localStorageLength = Math.floor(Math.random()*100);
-      // valueArray.push("Session " + String(localStorageLength));
       var arrayName = ("SESSION924"+urlArray.toString());
-      console.log(arrayName);
       redundancyChecker(urlArray).then(redun => {
-        // console.log(redun);
         if (redun == false) {
           async function callingFunction() {
             const key = await buttonKeyIncrementer();
-            btnVisibleName = key.replace('SESSION924:N', '');
+            btnVisibleName = key.replace('BTN924:N', '');
             valueArray.push("Session " + btnVisibleName);
             localforage.setItem(key, JSON.stringify(valueArray));
-            // console.log(btnVisibleName);
 
           }
           callingFunction();
@@ -291,7 +310,7 @@ clearAll.onclick = function (element) {
 };
 
 window.addEventListener('mousedown', (event) => {
-  console.log(event);
+  // console.log(event);
   if (event.which === 3) {
     divTest = String(event.target.className); 
     obj = event.target;
@@ -315,31 +334,40 @@ window.addEventListener('mousedown', (event) => {
 
 chrome.runtime.onInstalled.addListener(function() {
     chrome.management.getSelf(function(extensionInfo) {
-        console.log("getSelf: ", extensionInfo);
+        // console.log("getSelf: ", extensionInfo);
         chrome.tabs.query({url: "chrome-extension://jgcbiapajnpiekmfmnohjmccjfafelbg/*"}, function(tabs) {
-            console.log("tabs: ", tabs);
+            // console.log("tabs: ", tabs);
             var currentTab = tabs[0];
             var tabId = currentTab.id;
             chrome.tabs.get(tabId, function(tab) {
-                console.log("tab: ", tab);
+                // console.log("tab: ", tab);
                 var windowId = tab.windowId;
-                console.log("windowId: ", windowId);
+                // console.log("windowId: ", windowId);
             });
         });
     });
 });
 
-// New Bug: Right clicking and deleting a page causes the next page to delete. so deleting session
-// 1 deletes session 2 instead for some reason. The problem is with mouse down windoweventlistener.
-// The problem cant be with the bubbling event.target thing that i worked on because clicking
-// directly on the button, not even the favicon or faicon, returns next button num.
-// Also nothing else is calling this mousedown event listener at all. Only right clicking calls
-// the function, that is the only way to run it.
-// Idea: I assign the name and details to a button in the async function, so it technically
-// should not be available outside of the scope of that function. The name is assigned to the
-// button inside of the async function, so maybe thats the problem. Maybe i need to make it
-// global somehow.
-// UPDATE: Issue lies in the createButtons function. Go to line 111.
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.action === "saveButtonClick") {
+    save.onclick();
+  }
+});
+
+
+// work on save functionality through right click
+
+// Change font for button text and make sure max btn character limit is good
+
+// using chrome storage and passing the value would mean i have to change how save.onclick works
+// if i even can. it might be easier to just call localforage from the background script.
+// calling local forage from background script didnt work. I think i should go back
+// to using chrome storage, but create a second save function in the main script
+// that handles saving pages to localforage. i dont need to append anything, create the
+// button, save favicon, faicon, etc. i just need to save the url and the name to localforage
+
+
+
 
 
 
