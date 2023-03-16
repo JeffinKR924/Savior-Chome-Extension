@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
 
-  "name": "Savior Plugin",
-  "description": "This extension will save your webpage",
+  "name": "Savior",
+  "description": "Savior: Effortlessly 'save your' favorite pages or entire sessions and instantly open them with a single click, speeding up your browsing experience!",
   "version": "1.0",
 
   "action": {
@@ -14,6 +14,7 @@
     "service_worker": "eventPage.js",
     "type": "module"
   },
+
   "permissions": [
    "activeTab",
    "storage",
