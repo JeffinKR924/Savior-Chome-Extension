@@ -1,3 +1,4 @@
+// Creates context menu for saving page, deleting page, and renaming page
 chrome.contextMenus.removeAll(function() {
   chrome.contextMenus.create({
     "id": "savePage",
@@ -16,23 +17,19 @@ chrome.contextMenus.removeAll(function() {
   })
 });
 
-
-chrome.contextMenus.onClicked.addListener((info, tab) => {
-  chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+// Adds listener for save page in context menu
+chrome.contextMenus.onClicked.addListener((info) => {
+  chrome.tabs.query({active: true, currentWindow: true}, tab => {
+    // Gets the url of the current tab and window when save page is clicked, then stores into a list
     if (info.menuItemId === "savePage") {
-      const url = tabs[0].url;
+      const url = tab[0].url;
       const data = [url];
-      // Get tempData from local storage
-      chrome.storage.local.get('tempData', async (result) => {
-        // if tempData is not empty, add url to tempData
-        if (result.tempData) {
-          data.push(...result.tempData);
+      // Gets tempUrlList from chrome.storage, and if it exists, then it adds those urls to data list and stores in chrome.storage
+      chrome.storage.local.get('tempData', async (tempUrlList) => {
+        if (tempUrlList.tempData) {
+          data.push(...tempUrlList.tempData);
         }
-        // else create new tempData
-        await chrome.storage.local.set({'tempData': data}, () => {
-          console.log('Data saved locally');
-        }
-        )
+        await chrome.storage.local.set({'tempData': data});
       });
     }
   });
