@@ -13,7 +13,7 @@ async function savePage() {
   });
   
   if (result.tempData) {
-    for (let i = 0; i < result.tempData.length; i++) {
+    for (let i = ((result.tempData.length)-1); i >= 0; i--) {
       valueArray = [];
       urlArray = [];
       urlArray.push(result.tempData[i]);
@@ -72,7 +72,7 @@ async function redundancyChecker(urlArray) {
 
 function nameTrimmer(btnName) {
   if (btnName.length>19){
-    btnName = btnName.slice(0, 19)+"...";
+    btnName = btnName.slice(0, 44)+"...";
   }
   return btnName;
 }
@@ -92,9 +92,7 @@ function btnNamer(btnName) {
     btnName = btnName.slice(0, checkIndex+1)+btnName.charAt(checkIndex+1).toUpperCase()+btnName.slice(checkIndex+2);
   }
   btnName = btnName.trim();
-  if (btnName.length>19){
-    btnName = btnName.slice(0, 19)+"...";
-  }
+  btnName = nameTrimmer(btnName);
   return btnName;
 }
 
@@ -203,13 +201,13 @@ save.onclick = function (element) {
           const key = await buttonKeyIncrementer();
           // console.log(key);
           localforage.setItem(key, JSON.stringify(valueArray));
-          btn.className = 'dynamicButton';
         }
         callingFunction();
       }
     }); 
 
     btn = document.createElement("BUTTON");
+    btn.className = 'dynamicButton';
     btn.innerHTML = (currentName);
     btn.name = urlArray;
     btn.appendChild(favIconImage);
@@ -291,6 +289,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         localforage.getItem(objectName).then((value) => {
           oldName = JSON.parse(value);
           let newName = prompt("Enter a new name:", String(oldName[1]));
+          newName = nameTrimmer(newName);
           oldName[1] = newName;
           localforage.setItem(String(objectName), JSON.stringify(oldName));
           window.close();
@@ -355,17 +354,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 
-// work on save functionality through right click
-
 // Change font for button text and make sure max btn character limit is good
-
-// using chrome storage and passing the value would mean i have to change how save.onclick works
-// if i even can. it might be easier to just call localforage from the background script.
-// calling local forage from background script didnt work. I think i should go back
-// to using chrome storage, but create a second save function in the main script
-// that handles saving pages to localforage. i dont need to append anything, create the
-// button, save favicon, faicon, etc. i just need to save the url and the name to localforage
-
+// gonna keep 10.4 font size. should i get rid of one char lenght?
+// 18 chars isnt long. if it goes longer, should i add a second line. there is room
+// weird bug. when you save two of the same pages. it does a weird add thing
 
 
 
