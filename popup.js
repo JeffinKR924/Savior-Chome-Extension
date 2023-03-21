@@ -358,6 +358,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 // gonna keep 10.4 font size. should i get rid of one char lenght?
 // 18 chars isnt long. if it goes longer, should i add a second line. there is room
 // weird bug. when you save two of the same pages. it does a weird add thing
+// bug. cant rename right after saving a page. have to refresh
 
 
 
