@@ -177,8 +177,6 @@ async function createButtons() {
 
 save.onclick = function (element) {
   chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-    // currentWindow seems to be working, but test it because i thought issues occured before when i
-// used it years ago
     valueArray = [];
     urlArray = [];
     url = tabs[0].url;
@@ -194,29 +192,25 @@ save.onclick = function (element) {
     currentUrl = url;
     currentName = btnNamer(currentUrl);
     valueArray.push(currentName);
+    btn = document.createElement("BUTTON");
     redundancyChecker(urlArray).then(redun => {
-      // console.log(redun);
       if (redun == false) {
         async function callingFunction() {
           const key = await buttonKeyIncrementer();
-          // console.log(key);
+          btn.name = key;
           localforage.setItem(key, JSON.stringify(valueArray));
         }
         callingFunction();
       }
     }); 
-
-    btn = document.createElement("BUTTON");
     btn.className = 'dynamicButton';
     btn.innerHTML = (currentName);
-    btn.name = urlArray;
     btn.appendChild(favIconImage);
     btn.appendChild(faIconFile);
     btn.onclick = function() {
       chrome.tabs.create({
         url: url
       });
-      // console.log(url);
     }
     myDiv.appendChild(btn);
   });
@@ -237,10 +231,12 @@ saveSession.onclick = function (element) {
       }
       valueArray.push(urlArray);
       var arrayName = ("SESSION924"+urlArray.toString());
+      btn = document.createElement("BUTTON");
       redundancyChecker(urlArray).then(redun => {
         if (redun == false) {
           async function callingFunction() {
             const key = await buttonKeyIncrementer();
+            btn.name = key;
             btnVisibleName = key.replace('BTN924:N', '');
             valueArray.push("Session " + btnVisibleName);
             localforage.setItem(key, JSON.stringify(valueArray));
@@ -249,7 +245,6 @@ saveSession.onclick = function (element) {
           callingFunction();
         }
       }); 
-      btn = document.createElement("BUTTON");
       btn.className = 'dynamicButton';
       btn.innerHTML = ("New Session");
       arrVal = String(urlArray[0]);
@@ -260,7 +255,6 @@ saveSession.onclick = function (element) {
       var faIconFolder = document.createElement("h5");
       faIconFolder.innerHTML = '<i class="fa fa-folder"></i>';
       faIconFolder.className = 'faIconFolders';
-      btn.name = arrayName;
       btn.appendChild(favIconImage);
       btn.appendChild(faIconFolder);
       myDiv.appendChild(btn);
@@ -309,11 +303,9 @@ clearAll.onclick = function (element) {
 };
 
 window.addEventListener('mousedown', (event) => {
-  // console.log(event);
   if (event.which === 3) {
     divTest = String(event.target.className); 
     obj = event.target;
-    // console.log(obj);
     if (divTest == 'fa-solid fa-file' || divTest == 'favIcon' || divTest == 'fa fa-folder') {
       while(divTest != 'dynamicButton'){
         obj = obj.parentElement;
@@ -327,7 +319,6 @@ window.addEventListener('mousedown', (event) => {
     else {
       objectName = null;
     }
-    // console.log(objectName);
   }
 });
 
