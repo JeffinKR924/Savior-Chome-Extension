@@ -8,8 +8,8 @@ Savior is a Chrome extension that allows users to save individual pages or multi
 * [Features](#features)
 * [Installation](#installation)
 * [Usage](#usage)
-* [About-the-Creator](#🚀 About the Creator)
-* [Links](#🔗 Links)
+* [About the Creator](#about-the-creator)
+* [Links](#links)
 
 ## Features
 Save individual pages as buttons on the interface.
@@ -37,7 +37,7 @@ Contributions are welcome! Feel free to open an issue or submit a pull request i
 
 
 ## 🚀 About the Creator
-My name is Jeffin Rajan and I am a Computer Science major at Drexel University. **This program was created and submitted for Drexel Freshmen Design Project**
+My name is Jeffin Rajan and I am a Computer Science major at Drexel University. **This program was created and submitted for Drexel Freshman Design Project**
 
 
 ## 🔗 Links
