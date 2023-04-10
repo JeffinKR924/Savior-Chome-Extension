@@ -5,11 +5,11 @@ Savior - A Chrome Extension for Saving Pages and Sessions
 Savior is a Chrome extension that allows users to save individual pages or multiple pages (sessions) as buttons on the interface. With Savior, you can conveniently open the saved page or session instantly by pressing the corresponding button on the interface.
 
 ## Table of Contents
-[Features](#features)
-[Installation](#installation)
-[Usage](#usage)
-[About the Creator](#About-the-Creator)
-[Links](#Links)
+* [Features](#features)
+* [Installation](#installation)
+* [Usage](#usage)
+* [About-the-Creator](#🚀 About the Creator)
+* [Links](#🔗 Links)
 
 ## Features
 Save individual pages as buttons on the interface.
