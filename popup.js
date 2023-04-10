@@ -375,4 +375,6 @@ window.addEventListener('mousedown', (event) => {
 
 // Change icon file names, create folder for it and link everywhere
 // Give all code to chatgpt and have it generate ReadMe
+// Add clear all for chrome storage too
+
 

@@ -45,13 +45,12 @@ chrome.storage.sync.remove([key], function());
 
 #### Chrome Storage API
 
-| Method               | Description                                |
-| :------------------- | :----------------------------------------- |
-| `set(key, value)`    | Stores a key-value pair in storage         |
-| `get(key, callback)` | Retrieves the value of a key from storage  |
-| `remove(key)`        | Removes a key-value pair from storage      |
-| `clear()`            | Removes all key-value pairs from storage   |
-
+| Method       | Return Value  | Description                                                                                                       |
+| :----------- | :----------- | :---------------------------------------------------------------------------------------------------------------- |
+| `chrome.storage.local.get(keys)` | `Promise` | Gets one or more items from storage.|
+| `chrome.storage.local.set(items)` | `Promise` | Sets one or more items to storage.|
+| `chrome.storage.local.remove(keys)` | `Promise` | Removes one or more items from storage.|
+| `chrome.storage.local.clear()` | `Promise` | Removes all items from storage.|
 
 # LocalForage Library
 # Can access Library from: LocalForage
