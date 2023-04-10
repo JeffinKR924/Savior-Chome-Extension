@@ -2,6 +2,7 @@
 
 Savior - Effortlessly 'save your' favorite pages or entire sessions and instantly open them with a single click, speeding up your browsing
 
+
 Savior is a Chrome extension that allows users to save individual pages or multiple pages (sessions) as buttons on the interface. With Savior, you can conveniently open the saved page or session instantly by pressing the corresponding button on the interface.
 
 ## Table of Contents
@@ -33,6 +34,41 @@ Savior is a Chrome extension that allows users to save individual pages or multi
 * To open a saved page or session, simply click the corresponding button on the interface.
 * To delete an individual saved page, open the Savior interface, right-click the button you want to delete, navigate to the Savior menu, and choose "Delete". The extension will close, and when you reopen it, the button should no longer be present.
 * To rename a saved page or session, right-click the corresponding button in the Savior interface, choose "Rename" from the Savior menu, enter a new name, and press Enter.
+
+## API and Libraries
+# Chrome.storage API
+# Can access API from: Chrome Developers
+
+chrome.storage.sync.set({key: value});
+chrome.storage.sync.get([key], function(result));
+chrome.storage.sync.remove([key], function());
+
+#### Chrome Storage API
+
+| Method               | Description                                |
+| :------------------- | :----------------------------------------- |
+| `set(key, value)`    | Stores a key-value pair in storage         |
+| `get(key, callback)` | Retrieves the value of a key from storage  |
+| `remove(key)`        | Removes a key-value pair from storage      |
+| `clear()`            | Removes all key-value pairs from storage   |
+
+
+# LocalForage Library
+# Can access Library from: LocalForage
+
+localforage.setItem(key, value);
+localforage.getItem(key, function(err, value));
+localforage.removeItem(key, function(err));
+
+| Method         | Parameters                                      | Description                                           |
+| -------------- | ----------------------------------------------- | ----------------------------------------------------- |
+| `localforage.setItem` | `key: string`, `value: any`, `callback: function` | Set the value for the given key. |
+| `localforage.getItem` | `key: string`, `callback: function` | Get the value for the given key. |
+| `localforage.removeItem` | `key: string`, `callback: function` | Remove the item for the given key. |
+
+## Notes
+* Button name is limited to 41 characters. Anything more will be cut off.
+* Not all domains will be removed in the button name
 
 ## 🚀 About the Creator
 My name is Jeffin Rajan and I am a Computer Science major at Drexel University. **This program was created and submitted for Drexel Freshman Design Project**
