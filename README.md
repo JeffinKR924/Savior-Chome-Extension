@@ -61,9 +61,9 @@ localforage.removeItem(key, function(err));
 
 | Method         | Parameters                                      | Description                                           |
 | -------------- | ----------------------------------------------- | ----------------------------------------------------- |
-| `localforage.setItem` | `key: string`, `value: any`, `callback: function` | Set the value for the given key. |
-| `localforage.getItem` | `key: string`, `callback: function` | Get the value for the given key. |
-| `localforage.removeItem` | `key: string`, `callback: function` | Remove the item for the given key. |
+| `localforage.setItem` | `key: string`, `callback: function` | Set the value for the given key |
+| `localforage.getItem` | `key: string`, `callback: function` | Get the value for the given key |
+| `localforage.removeItem` | `key: string`, `callback: function` | Remove the item for the given key |
 
 ## Notes
 * Button name is limited to 41 characters. Anything more will be cut off.
