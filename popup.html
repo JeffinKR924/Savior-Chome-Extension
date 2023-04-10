@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
+  <!-- Adds Front-End Library and Design Changes -->
   <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" href="popup.css">
     <div id = 'titleDiv'>
-      <img src="title1.png" width= '400' height = '65' alt="Title" class = 'center'>
+      <img src="saviorTitle.png" width= '400' height = '65' alt="Title" class = 'title'>
     </div>
   </head>
 
+  <!-- Creates Buttons and Adds Back-End Functionality -->
   <body>
     <script src="localForage/localForage-1.10.0/dist/localforage.js"></script>
     <div id = "saveBtnDiv">
-      <button id="save" class="button button1"><center>Save Page</center></button>
-      <button id="saveSession" class="button button2"><center>Save Session</center></button>
+      <button id="savePage" class="savePageBtn"><center>Save Page</center></button>
+      <button id="saveSession" class="saveSessionBtn"><center>Save Session</center></button>
     </div>
     <div id = "clearBtnDiv">
       <button id="clearAll" class ="clearAllBtn"><center>Clear All</center></button>
