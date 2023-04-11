@@ -45,12 +45,12 @@ chrome.storage.sync.remove([key], function());
 
 #### Chrome Storage API
 
-| Method       | Return Value  | Description                                                                                                       |
+| Method       | Parameters  | Description                                                                                                       |
 | :----------- | :----------- | :---------------------------------------------------------------------------------------------------------------- |
-| `chrome.storage.local.get(keys)` | `Promise` | Gets one or more items from storage.|
-| `chrome.storage.local.set(items)` | `Promise` | Sets one or more items to storage.|
-| `chrome.storage.local.remove(keys)` | `Promise` | Removes one or more items from storage.|
-| `chrome.storage.local.clear()` | `Promise` | Removes all items from storage.|
+| `chrome.storage.local.get()` | `key` | Gets one or more items from storage.|
+| `chrome.storage.local.set()` | `key: value` | Sets one or more items to storage.|
+| `chrome.storage.local.remove()` | `key` | Removes one or more items from storage.|
+| `chrome.storage.local.clear()` | `N/A` | Removes all items from storage.|
 
 # LocalForage Library
 # Can access Library from: LocalForage
@@ -61,9 +61,10 @@ localforage.removeItem(key, function(err));
 
 | Method         | Parameters                                      | Description                                           |
 | -------------- | ----------------------------------------------- | ----------------------------------------------------- |
-| `localforage.setItem` | `key: string`, `callback: function` | Set the value for the given key |
-| `localforage.getItem` | `key: string`, `callback: function` | Get the value for the given key |
-| `localforage.removeItem` | `key: string`, `callback: function` | Remove the item for the given key |
+| `localforage.setItem()` | `key: string`, `callback: function` | Set the value for the given key |
+| `localforage.getItem()` | `key: string`, `callback: function` | Get the value for the given key |
+| `localforage.removeItem()` | `key: string`, `callback: function` | Remove the item for the given key |
+| `localforage.clear()` | `callback: function` | Clear the entire storage |
 
 ## Notes
 * Button name is limited to 41 characters. Anything more will be cut off.
