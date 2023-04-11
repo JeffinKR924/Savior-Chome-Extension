@@ -39,9 +39,11 @@ Savior is a Chrome extension that allows users to save individual pages or multi
 ### Chrome.storage API
 **Can access API from: Chrome Developers**
 
+'''
 chrome.storage.sync.set({key: value});
 chrome.storage.sync.get([key], function(result));
 chrome.storage.sync.remove([key], function());
+'''
 
 #### Chrome Storage API
 
@@ -55,9 +57,13 @@ chrome.storage.sync.remove([key], function());
 ### LocalForage Library
 **Can access Library from: LocalForage**
 
+'''
 localforage.setItem(key, value);
 localforage.getItem(key, function(err, value));
 localforage.removeItem(key, function(err));
+'''
+
+#### LocalForage Library
 
 | Method         | Parameters                                      | Description                                           |
 | -------------- | ----------------------------------------------- | ----------------------------------------------------- |
@@ -71,7 +77,7 @@ localforage.removeItem(key, function(err));
 * Not all domains will be removed in the button name
 
 ## 🚀 About the Creator
-My name is Jeffin Rajan and I am a Computer Science major at Drexel University. **This program was created and submitted for Drexel Freshman Design Project**
+My name is Jeffin Rajan and I am a Computer Science major at Drexel University. **This program was created and submitted for the Drexel University Freshman Design Project 2021**
 
 
 ## 🔗 Links
