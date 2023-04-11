@@ -36,8 +36,8 @@ Savior is a Chrome extension that allows users to save individual pages or multi
 * To rename a saved page or session, right-click the corresponding button in the Savior interface, choose "Rename" from the Savior menu, enter a new name, and press Enter.
 
 ## API and Libraries
-# Chrome.storage API
-# Can access API from: Chrome Developers
+### Chrome.storage API
+**Can access API from: Chrome Developers**
 
 chrome.storage.sync.set({key: value});
 chrome.storage.sync.get([key], function(result));
@@ -47,10 +47,10 @@ chrome.storage.sync.remove([key], function());
 
 | Method       | Parameters  | Description                                                                                                       |
 | :----------- | :----------- | :---------------------------------------------------------------------------------------------------------------- |
-| `chrome.storage.local.get()` | `key` | Gets one or more items from storage.|
-| `chrome.storage.local.set()` | `key: value` | Sets one or more items to storage.|
-| `chrome.storage.local.remove()` | `key` | Removes one or more items from storage.|
-| `chrome.storage.local.clear()` | `N/A` | Removes all items from storage.|
+| `chrome.storage.local.get()` | `key`, `callback: function` | Gets one or more items from storage.|
+| `chrome.storage.local.set()` | `key: value`, `callback: function` | Sets one or more items to storage.|
+| `chrome.storage.local.remove()` | `key`, `callback: function` | Removes one or more items from storage.|
+| `chrome.storage.local.clear()` | `callback: function` | Removes all items from storage.|
 
 # LocalForage Library
 # Can access Library from: LocalForage
