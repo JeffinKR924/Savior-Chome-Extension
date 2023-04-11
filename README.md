@@ -52,8 +52,8 @@ chrome.storage.sync.remove([key], function());
 | `chrome.storage.local.remove()` | `key`, `callback: function` | Removes one or more items from storage.|
 | `chrome.storage.local.clear()` | `callback: function` | Removes all items from storage.|
 
-# LocalForage Library
-# Can access Library from: LocalForage
+### LocalForage Library
+**Can access Library from: LocalForage**
 
 localforage.setItem(key, value);
 localforage.getItem(key, function(err, value));
