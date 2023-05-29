@@ -5,11 +5,11 @@
   "description": "Savior: Effortlessly 'save your' favorite pages or entire sessions and instantly open them with a single click, speeding up your browsing experience!",
   "version": "1.0",
   "icons": {
-    "48": "icon.png"
+    "48": "icons/icon.png"
   },
 
   "action": {
-   "default_icon": "icon.png",
+   "default_icon": "icons/icon.png",
    "default_popup": "popup.html"
   },
 

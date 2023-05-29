@@ -347,6 +347,7 @@ clearAll.onclick = function (element) {
   var clearConfirmation = confirm("Are you sure you want to delete all saved pages and sessions?");
   if (clearConfirmation) {
     localforage.clear();
+    chrome.storage.local.clear();
     window.open('', '_blank').close();
   }
 };
@@ -372,9 +373,3 @@ window.addEventListener('mousedown', (event) => {
     }
   }
 });
-
-// Change icon file names, create folder for it and link everywhere
-// Give all code to chatgpt and have it generate ReadMe
-// Add clear all for chrome storage too
-
-
