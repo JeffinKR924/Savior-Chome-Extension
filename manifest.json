@@ -2,7 +2,7 @@
   "manifest_version": 3,
 
   "name": "Savior",
-  "description": "Savior: Effortlessly 'save your' favorite pages or entire sessions and instantly open them with a single click, speeding up your browsing experience!",
+  "description": "Savior: Effortlessly 'save your' favorite pages or entire sessions and instantly open them with a click, speeding up your browsing experience!",
   "version": "1.0",
   "icons": {
     "48": "icons/icon.png"

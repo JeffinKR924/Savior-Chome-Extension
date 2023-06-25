@@ -156,9 +156,12 @@ async function createButtons() {
 
       // Adds functionality for opening page
       pageBtn.onclick = function() {
-        chrome.tabs.create({
-          url: btnUrl
-        });
+        pagesArray = ((btnVal))[0];
+        for (var z = 0; z < pagesArray.length; z++) {
+          chrome.tabs.create({
+            url: pagesArray[z]
+          });
+        }
       }
 
       myDiv.appendChild(pageBtn);
@@ -337,7 +340,7 @@ chrome.contextMenus.onClicked.addListener((info) => {
         localforage.setItem(String(objectName), JSON.stringify(btnValue));
         
         window.close();
-    });
+      });
     }
   }
 });
